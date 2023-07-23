@@ -1,0 +1,217 @@
+html{
+    user-select: none;
+  }
+  .bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+
+  @media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+      font-size: 3.5rem;
+    }
+  }
+
+  .b-example-divider {
+    width: 100%;
+    height: 3rem;
+    background-color: rgba(0, 0, 0, .1);
+    border: solid rgba(0, 0, 0, .15);
+    border-width: 1px 0;
+    box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+  }
+
+  .b-example-vr {
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 100vh;
+  }
+
+  .bi {
+    vertical-align: -.125em;
+    fill: currentColor;
+  }
+
+  .nav-scroller {
+    position: relative;
+    z-index: 2;
+    height: 2.75rem;
+    overflow-y: hidden;
+  }
+
+  .nav-scroller .nav {
+    display: flex;
+    flex-wrap: nowrap;
+    padding-bottom: 1rem;
+    margin-top: -1px;
+    overflow-x: auto;
+    text-align: center;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  .bd-mode-toggle {
+    z-index: 1500;
+  }
+  #invisivel{
+    box-shadow: none;
+    background-color: #5a23c800;
+  }
+  .item-nav{
+    margin-right: 15px;
+  }
+  .navbar-first{
+    bottom: 0;
+    top: 10%;
+  }
+  .baix{
+    margin-top: 5rem;
+  }
+  .sm{
+    margin-right: 40px;
+  }
+  #timer{
+    padding: 10px;
+  }
+  .custom-tooltip {
+    --bs-tooltip-bg: var(--bs-secondary);
+  }
+  .long h6{
+    font-size: 1.2rem;
+  }
+
+  .btn-cinza{
+--bs-btn-color: #000;
+--bs-btn-bg: #efeeee;
+--bs-btn-border-color: #f8f9fa;
+--bs-btn-hover-color: #000;
+--bs-btn-hover-bg: #eeecec;
+--bs-btn-hover-border-color: #ececed;
+--bs-btn-focus-shadow-rgb: 211, 212, 213;
+--bs-btn-active-color: #000;
+--bs-btn-active-bg: #c6c7c8;
+--bs-btn-active-border-color: #babbbc;
+--bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+--bs-btn-disabled-color: #000;
+--bs-btn-disabled-bg: #f8f9fa;
+--bs-btn-disabled-border-color: #f8f9fa; 
+}
+
+.bg-work-secondary {
+background-image: linear-gradient( to left, rgb(237, 236, 236), rgb(254, 255, 254));
+}
+.bg-work-ivisible {
+background-color: #00000000;
+}
+
+#text_workadmin{
+font-size: 1.4rem;
+letter-spacing: 3px;
+color: #2c2f31;
+}
+
+.btn-primary {
+--bs-btn-color: #fff;
+--bs-btn-bg: #0d85fd;
+--bs-btn-border-color: #0d8dfd;
+--bs-btn-hover-color: #fff;
+--bs-btn-hover-bg: #0b6ed7;
+--bs-btn-hover-border-color: #0a7aca;
+--bs-btn-focus-shadow-rgb: 49, 132, 253;
+--bs-btn-active-color: #fff;
+--bs-btn-active-bg: #0a6dca;
+--bs-btn-active-border-color: #0a61be;
+--bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+--bs-btn-disabled-color: #fff;
+--bs-btn-disabled-bg: #0d8dfd;
+--bs-btn-disabled-border-color: #0d69fd;
+opacity: 0.7;
+}
+
+.btn-outline-primary {
+--bs-btn-color: #0d91fd;
+--bs-btn-border-color: #0d89fd;
+--bs-btn-hover-color: #fff;
+--bs-btn-hover-bg: #0d81fd;
+--bs-btn-hover-border-color: #0d8dfd;
+--bs-btn-focus-shadow-rgb: 13, 110, 253;
+--bs-btn-active-color: #fff;
+--bs-btn-active-bg: #0d85fd;
+--bs-btn-active-border-color: #0d7dfd;
+--bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+--bs-btn-disabled-color: #0d79fd;
+--bs-btn-disabled-bg: transparent;
+--bs-btn-disabled-border-color: #0d7dfd;
+opacity: 0.7;
+}
+
+.backImageAbs{
+background-image: url('../site/img/abstrato.jpg');
+background-size: cover;
+background-position: center;
+width: 100%;
+height: 200vh;
+position: fixed;
+z-index: -5;
+}
+
+.aviso{
+background-color: rgb(237, 237, 237);
+width: 100%;
+height: 100%;
+z-index: 100;
+position: absolute;
+display: flex;
+justify-content: center;
+align-items: center;
+text-align: center;
+}
+
+#preload{
+background-color: rgb(237, 237, 237);
+width: 100%;
+height: 100%;
+z-index: 100;
+position: absolute;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+.engrenagem1{
+background-image: url('../site/img/engrenagem.png');
+background-size: cover;
+background-position: center;
+height: 4.3rem;
+width: 4.3rem;
+margin-left: -1rem;
+margin-top: -1.8rem;
+animation: engrenagem1 1s infinite;
+}
+.engrenagem2{
+background-image: url('../site/img/engrenagem2.png');
+background-size: cover;
+background-position: center;
+height: 5.3rem;
+width: 5.3rem;
+animation: engrenagem2 1s infinite;
+}
+
+@keyframes engrenagem1 {
+0%{
+transform: rotate(0deg);
+}  
+100%{
+transform: rotate(180deg);
+}
+}
+@keyframes engrenagem2 {
+0%{
+transform: rotate(0deg);
+}  
+100%{
+transform: rotate(-180deg);
+}
+}

@@ -1,0 +1,79 @@
+#orcamentoArea{
+    width: 30rem;
+    height: 40rem;
+    background-color: white;
+  }
+
+  .border-cinza{
+    border: 1px solid rgb(210, 208, 208);
+  }
+
+  .quitWindow{
+    border: 0;
+    color: brown;
+    background-color: rgba(240, 248, 255, 0);
+    position: absolute;
+    right: 5px;
+  }
+  .quitWindow:hover{
+    color: rgb(231, 12, 12);
+  }
+
+  .img_edit{
+    background-size: 475px 237.5px;
+    background-position: center;
+  }
+  .painel{
+    background-color: rgba(240, 248, 255, 0);
+    border-radius: 0.8rem;
+  }
+  .toast:not(.show) {
+    display: block;
+  }
+  .toast{
+    display: block;
+    position: relative;
+  }
+
+  .menu {
+  margin: 0;
+  padding: 0;
+  width: 200px;
+  display: none;
+  z-index: 5;
+  position: absolute;
+}
+.list-group {
+  --bs-list-group-color: var(--bs-body-color);
+  --bs-list-group-bg: var(--bs-body-bg);
+  --bs-list-group-border-color: black;
+  --bs-list-group-border-width: var(--bs-border-width);
+  --bs-list-group-border-radius: var(--bs-border-radius);
+  --bs-list-group-item-padding-x: 1rem;
+  --bs-list-group-item-padding-y: 0.5rem;
+  --bs-list-group-action-color: var(--bs-secondary-color);
+  --bs-list-group-action-hover-color: var(--bs-emphasis-color);
+  --bs-list-group-action-hover-bg: var(--bs-tertiary-bg);
+  --bs-list-group-action-active-color: var(--bs-body-color);
+  --bs-list-group-action-active-bg: var(--bs-secondary-bg);
+  --bs-list-group-disabled-color: var(--bs-secondary-color);
+  --bs-list-group-disabled-bg: var(--bs-body-bg);
+  --bs-list-group-active-color: #fff;
+  --bs-list-group-active-bg: #0d6efd;
+  --bs-list-group-active-border-color: #0d6efd;
+  display: flex;
+  flex-direction: column;
+  padding-left: 0;
+  margin-bottom: 0;
+  border-radius: var(--bs-list-group-border-radius);
+}
+
+.containerImagem{
+  width: 75%;
+  height: 20rem;
+  background-color: rgb(231, 231, 231);
+  border-radius: 3%;
+  margin-left: 12%;
+  border: 0;
+}
+

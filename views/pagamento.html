@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-br" data-bs-theme="light" data-lt-installed="true">
+    <head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkAdmin</title>
+
+    <link rel="stylesheet" href="../site/bootstrap/css/bootstrap.css">
+    <!-- ICON WORKADMIN -->
+    <link rel="shortcut icon" href="../site/img/workadmin-fundo-removido.png" type="image/x-icon">  
+    <style>
+              html{
+    user-select: none;
+  }
+        .btn-primary {
+--bs-btn-color: #fff;
+--bs-btn-bg: #0d85fd;
+--bs-btn-border-color: #0d8dfd;
+--bs-btn-hover-color: #fff;
+--bs-btn-hover-bg: #0b6ed7;
+--bs-btn-hover-border-color: #0a7aca;
+--bs-btn-focus-shadow-rgb: 49, 132, 253;
+--bs-btn-active-color: #fff;
+--bs-btn-active-bg: #0a6dca;
+--bs-btn-active-border-color: #0a61be;
+--bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+--bs-btn-disabled-color: #fff;
+--bs-btn-disabled-bg: #0d8dfd;
+--bs-btn-disabled-border-color: #0d69fd;
+opacity: 0.7;
+}
+
+.btn-outline-primary {
+--bs-btn-color: #0d91fd;
+--bs-btn-border-color: #0d89fd;
+--bs-btn-hover-color: #fff;
+--bs-btn-hover-bg: #0d81fd;
+--bs-btn-hover-border-color: #0d8dfd;
+--bs-btn-focus-shadow-rgb: 13, 110, 253;
+--bs-btn-active-color: #fff;
+--bs-btn-active-bg: #0d85fd;
+--bs-btn-active-border-color: #0d7dfd;
+--bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+--bs-btn-disabled-color: #0d79fd;
+--bs-btn-disabled-bg: transparent;
+--bs-btn-disabled-border-color: #0d7dfd;
+opacity: 0.7;
+}
+
+    </style>
+</head>
+<body>
+    <div class="pt-5  text-center border-bottom">
+        <img src="../site/img/pix.png" alt="">
+        <br><br>
+        <h4 class="text-body-emphasis" id="valor"> </h4>
+        <div class="col-lg-6 mx-auto">
+          <p class="lead mb-4">Copie o código PIX para colar e efetuar o pagamento no banco de sua preferência, ou utilize a câmera do seu smartphone para capturar o QRCode e realizar o pagamento.</p>
+          <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
+              <input type="text" class="form-control px-4" value="{{ codigo }}" id="texto">
+              <button type="button" class="btn btn-primary px-4 me-sm-3" id="btnCopy" onclick="copiar()">Copiar</button>
+          </div>
+        </div>
+          <div class="container">
+            <img src="{{ qrcode }}" class="img-fluid border rounded-3 shadow-lg mb-4" alt="QRCode PIX" width="130" height="130">
+            <p class="text-success" id="expira">Lembre-se que seu pagamento PIX expira em </p>
+          </div>
+    </div>
+</body>
+
+<script>
+
+    function copiar(){
+        let btnCopy = document.getElementById('btnCopy')
+        let texto = document.getElementById("texto")
+
+        btnCopy.innerHTML = 'Copiado'
+        navigator.clipboard.writeText(texto.value);
+    }
+
+    document.getElementById('valor').innerHTML = 'R$ '+ Number('{{ valor }}').toLocaleString('pt-br',{minimumFractionDigits: 2})
+
+    document.getElementById('expira').innerHTML += '{{ data_expiration }}'.replace('.000-03:00', '').replace('T', ' ás ')
+
+</script>
+</html>

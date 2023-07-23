@@ -1,0 +1,624 @@
+{% extends 'body.html' %}
+
+  {% block body %}
+  <link rel="stylesheet" href="../site/css/criarOrcamento.css">
+  <style>
+    #localImg{
+  background-color: #ffffff00;
+  width: 23rem;
+  height: 30rem;
+  border: 1px solid rgb(139, 133, 133);
+  border-radius: 5px;
+}
+  </style>
+
+  <script>
+    var fCliente
+  </script>
+
+  <div class="container p-5">
+
+<div class="toast-container position-fixed bottom-50 end-0 p-3" id="windowSelectCliente" hidden>
+  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <strong class="me-auto">Selecione um cliente já existente</strong>
+      <button type="button" class="btn-close" onclick="openOptionCliente()"></button>
+    </div>
+    <div class="toast-body">
+
+      <select class="form-select" id="selectClienteOption" onchange="clienteEscolhido()">
+        <option selected>Selecione o cliente</option>
+        {% for cliente in clientes %}
+          {% if cliente != null %}
+          <script>
+            fCliente = true
+          </script>
+
+          <option value="{{ cliente.id }}">{{ cliente.nome }}</option>
+          {% else %}
+          <script>
+            fCliente = false
+          </script>
+          {% endif %}
+        {% endfor %}
+      </select>
+
+    </div>
+  </div>
+</div>
+
+
+    <div class="row">
+        <div class="col-md-8 col-sm-12">
+          <div class="teble-responsive">
+            <div class="position-relative p-5 border-cinza rounded-3" id="orcamentoArea">
+              <ul class="list-group menu">
+                    
+              </ul>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+            <div class="d-grid gap-2">
+                <button onclick="fecharWindowLucro(1)" id="btnWindowLucro" class="btn btn-outline-primary">Abrir
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash-coin" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm5-4a5 5 0 1 1-10 0 5 5 0 0 1 10 0z"/>
+                    <path d="M9.438 11.944c.047.596.518 1.06 1.363 1.116v.44h.375v-.443c.875-.061 1.386-.529 1.386-1.207 0-.618-.39-.936-1.09-1.1l-.296-.07v-1.2c.376.043.614.248.671.532h.658c-.047-.575-.54-1.024-1.329-1.073V8.5h-.375v.45c-.747.073-1.255.522-1.255 1.158 0 .562.378.92 1.007 1.066l.248.061v1.272c-.384-.058-.639-.27-.696-.563h-.668zm1.36-1.354c-.369-.085-.569-.26-.569-.522 0-.294.216-.514.572-.578v1.1h-.003zm.432.746c.449.104.655.272.655.569 0 .339-.257.571-.709.614v-1.195l.054.012z"/>
+                    <path d="M1 0a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4.083c.058-.344.145-.678.258-1H3a2 2 0 0 0-2-2V3a2 2 0 0 0 2-2h10a2 2 0 0 0 2 2v3.528c.38.34.717.728 1 1.154V1a1 1 0 0 0-1-1H1z"/>
+                    <path d="M9.998 5.083 10 5a2 2 0 1 0-3.132 1.65 5.982 5.982 0 0 1 3.13-1.567z"/>
+                  </svg>
+                </button>
+            </div>
+            <div class="card" id="windowLucro" style="width: 18rem;" hidden>
+                <div class="card-header">
+                    <h5 class="card-title">Lucro no orçamento
+                        <button class="quitWindow" onclick="fecharWindowLucro(2)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-x-square" viewBox="0 0 16 16">
+                                <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                              </svg>
+                        </button>
+                    </h5>
+
+                </div>
+                <div class="card-body">
+                  <h6 class="card-subtitle mb-2 text-body-secondary">Análise de lucratividade</h6>
+                  <br>
+                  <label for="maoObra" class="form-label text-body-secondary">Mão de obra:</label>
+                  <div class="input-group mb-3">
+                    <span class="input-group-text" id="maoObra">R$</span>
+                    <input type="text" class="form-control" id="input_mao_obra" aria-describedby="maoObra">
+                  </div>
+                  <label for="valorCliente" class="form-label text-body-secondary">Valor peça(s) para cliente:</label>
+                  <div class="input-group mb-3">
+                    <span class="input-group-text" id="valorCliente">R$</span>
+                    <input type="text" class="form-control" aria-describedby="valorCliente" id="input_valor_peca_cliente">
+                  </div>
+                  <label for="valorReal" class="form-label text-body-secondary">Valor peça(s) real:</label>
+                  <div class="input-group mb-3">
+                    <span class="input-group-text" id="valorReal">R$</span>
+                    <input type="text" class="form-control" aria-describedby="valorReal" id="input_valor_peca_real">
+                  </div>
+                  <label for="valorMaterial" class="form-label text-body-secondary">Custo de material:</label>
+                  <div class="input-group mb-3">
+                    <span class="input-group-text" id="valorMaterial">R$</span>
+                    <input type="text" class="form-control" aria-describedby="valorMaterial" id="input_valor_material">
+                  </div>
+                  <label for="valorLavagem" class="form-label text-body-secondary">Custo de lavagem:</label>
+                  <div class="input-group mb-3">
+                    <span class="input-group-text" id="valorLavagem">R$</span>
+                    <input type="text" class="form-control" aria-describedby="valorLavagem" id="input_valor_lavagem">
+                  </div>
+                  <br><br>
+
+                  <div class="d-grid gap-2">
+                  <button class="btn btn-outline-success" onclick="calcularLucro()">Calcular Lucro</button>
+                  </div>
+                  <br>
+                  <div class="input-group mb-3">
+                    <span class="input-group-text bg-success text-light" id="valorTotal">R$</span>
+                    <input type="text" class="form-control" id="valor_total_lucro" aria-describedby="valorTotal" disabled>
+                  </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+    <br>
+    <br>
+    <br>
+    <div class="d-grid gap-2">
+        <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#gerarImagem">Gerar imagem</button>
+        <button class="btn btn-primary" type="button" onclick="addOrcamentoSistem()">Criar</button>
+    </div>
+
+    
+
+   </div>
+
+
+   <!-- Todos os Modals -->
+      <!-- Começo do Modal gerar imagem -->
+<div class="modal fade" id="gerarImagem"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Gerar imagem do orçamento</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" style="text-align: center; align-items: center;">
+
+        
+        <select class="form-select" id="selectTypeImage" onchange="selectOption()">
+          <option value="pdf" selected>PDF</option>
+          <option value="png">PNG</option>
+          <option value="jpeg">JPEG</option>
+        </select>
+        <br>
+        
+        <img id="localImg" src="" hidden>
+
+        <br>
+        <br>
+
+      <div class="btn-group" id="areaCompartilharDownload" hidden>
+        <form action="{{ url('compartilharWhats/') }}" method="post">
+          <input type="text" id="base64" name="base64" hidden>
+
+        <a id="btnDownload" class="btn btn-outline-success">
+          Download
+        </a>
+        <button id="compartilharWhats" class="btn btn-outline-success">
+          Compartilhar
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
+            <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
+          </svg>
+        </button>
+      </form>
+      </div>
+
+      </div>
+      <div class="modal-footer">
+        <div type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancelar</div>
+        <button type="submit" class="btn btn-primary" id="btnCriarImage" onclick="gerarImagem()">Download</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- final do Modal de gerar imagem -->
+   <!-- Todos os Modals -->
+
+   <script>
+
+    function selectOption(){
+      let typeImage = $('#selectTypeImage').val()
+      let btnCriarImage = document.getElementById('btnCriarImage')
+      let localImg = document.querySelector('#localImg')
+
+      if(typeImage == 'pdf'){
+        btnCriarImage.hidden = false
+        btnCriarImage.innerHTML = 'Download'
+        localImg.src = ''
+        localImg.hidden = true
+        document.getElementById('areaCompartilharDownload').hidden = true
+
+      }else if(typeImage == 'png' || typeImage == 'jpeg'){
+        btnCriarImage.hidden = false
+        btnCriarImage.innerHTML = 'Criar imagem'
+        localImg.src = ''
+        localImg.hidden = true
+        document.getElementById('areaCompartilharDownload').hidden = true
+      }
+    }
+
+    function gerarImagem(){
+
+      let typeImage = $('#selectTypeImage').val()
+      const element = document.getElementById('orcamentoArea');
+
+      if(typeImage == 'pdf'){
+        // Usar html2canvas para capturar a imagem do elemento
+        html2canvas(element).then(canvas => {
+          // Converter o canvas em base64
+          const imgData = canvas.toDataURL('image/png');
+  
+          // Configurar o tamanho do PDF
+          const pdf = new jsPDF('p', 'mm', 'a4');
+  
+          // Adicionar a imagem capturada como uma página do PDF
+          pdf.addImage(imgData, 'PNG', 0, 0, 210, 297); // A4 size: 210mm x 297mm
+  
+          let nomeCliente = ($("[name='cliente']").val() == '' ? 'cliente' : $("[name='cliente']").val())
+          
+          // Salvar o PDF
+          pdf.save('orçamento('+nomeCliente+').pdf');
+        });
+      }else if(typeImage == 'png'){
+
+            html2canvas(element).then(canvas => {
+                let localImg = document.querySelector('#localImg')
+                localImg.hidden = false
+                
+                var imgageData = canvas.toDataURL("image/png");
+                
+                var newData = imgageData.replace(
+                  /^data:image\/png/, "data:application/octet-stream");
+
+                $("#base64").val(newData)
+                localImg.src = newData
+                
+                let nomeCliente = ($("[name='cliente']").val() == '' ? 'cliente' : $("[name='cliente']").val())
+
+                document.getElementById('areaCompartilharDownload').hidden = false
+
+                document.getElementById('btnCriarImage').hidden = true
+              $("#btnDownload").attr(
+                "download", "orçamento("+ nomeCliente +").png").attr(
+                "href", newData);
+              });
+      }else if(typeImage == 'jpeg'){
+          html2canvas(element).then(canvas => {
+                let localImg = document.querySelector('#localImg')
+                localImg.hidden = false
+                
+                var imgageData = canvas.toDataURL("image/jpeg");
+                
+                var newData = imgageData.replace(
+                  /^data:image\/jpeg/, "data:application/octet-stream");
+
+                  $("#base64").val(newData)
+                  localImg.src = newData
+                
+                let nomeCliente = ($("[name='cliente']").val() == '' ? 'cliente' : $("[name='cliente']").val())
+
+                document.getElementById('areaCompartilharDownload').hidden = false
+
+                document.getElementById('btnCriarImage').hidden = true
+              $("#btnDownload").attr(
+                "download", "orçamento("+ nomeCliente +").jpeg").attr(
+                "href", newData);
+              });
+      }
+    }
+
+    function windowButtonRight(elemento){
+      if(elemento.name == 'valor'){
+        let id = elemento.id
+        var menu = document.querySelectorAll(".menu");
+    
+        elemento.addEventListener('contextmenu', function(e) {
+          
+            menu[0].style.display = 'block';
+            menu[0].style.marginLeft = (e.clientX - 390) + 'px';
+            menu[0].style.marginTop = (e.clientY - 100) + 'px';
+            e.preventDefault();
+    
+            menu[0].innerHTML = '<li class="list-group-item list-group-item-light" type="button" onclick="maoObraInput('+id+')">Mão de obra</li><li class="list-group-item list-group-item-light" type="button"  onclick="pecaInput('+id+')">Peça</li><li class="list-group-item list-group-item-light" type="button" onclick="limparInput('+id+')">Limpar</li>'
+          }, false);
+      }
+
+    }
+
+    let valoresMaoObra = []
+    let valoresPecas = []
+
+    function maoObraInput(elemento){
+      
+      valoresMaoObra.push(elemento.id)
+
+      gerarValorInputMaoObra()
+    }
+
+    function pecaInput(elemento){
+      
+      valoresPecas.push(elemento.id)
+
+      gerarValorInputPeca()
+    }
+
+    function limparInput(elemento){
+      let indexValorMO = valoresMaoObra.indexOf(elemento.id)
+      let indexValorP = valoresPecas.indexOf(elemento.id)
+
+      if(indexValorMO != -1){
+        valoresMaoObra.splice(indexValorMO, 1)
+
+        elemento.value = ''
+
+        gerarValorInputMaoObra()
+      }
+
+      if(indexValorP != -1){
+        valoresPecas.splice(indexValorP, 1)
+
+        elemento.value = ''
+
+        gerarValorInputPeca()
+      }
+    }
+    
+    function gerarValorInputMaoObra(){
+      
+      let total2 = 0
+      
+      for(let i=0; i < valoresMaoObra.length; i++){
+          let valueMaoObraNew = Number(($("#"+valoresMaoObra[i]).val()).replace('R', '').replace('$', '').replace(' ', '').replace('.','').replace(',', '.'))
+
+        total2 += valueMaoObraNew
+      }
+
+      document.getElementsByName("mao_obra")[0].value = 'R$ '+total2.toLocaleString('pt-br',{minimumFractionDigits: 2})
+
+      calculaTotal()
+    }
+    function gerarValorInputPeca(){
+      
+      let total2 = 0
+      
+      for(let i=0; i < valoresPecas.length; i++){
+          let valuePecaNew = Number(($("#"+valoresPecas[i]).val()).replace('R', '').replace('$', '').replace(' ', '').replace('.','').replace(',', '.'))
+
+        total2 += valuePecaNew
+      }
+
+      document.getElementsByName("total_pecas")[0].value = 'R$ '+total2.toLocaleString('pt-br',{minimumFractionDigits: 2})
+
+      calculaTotal()
+    }
+
+    document.addEventListener('click', () => {
+      var menu = document.querySelectorAll(".menu");
+      menu[0].style.display = 'none'
+    })
+
+    function clienteEscolhido(){
+      let selectClienteOption = document.getElementById('selectClienteOption')
+
+      "{% for cliente in clientes %}"
+          if(selectClienteOption.value == "{{ cliente.id }}"){
+            $("[name='cliente']").val("{{ cliente.nome }}")
+            $("[name='endereco_cliente']").val("{{ cliente.endereco }}")
+            $("[name='telefone_cliente']").val("{{ cliente.telefone }}")
+            openOptionCliente()
+          }
+      "{% endfor %}"
+    }
+   </script>
+
+
+   {% for elemento in elementosTipoOrcamento %}
+   <script>
+        if('{{ elemento.nome }}'.substring(0, 6) == 'painel'){
+            document.getElementById('orcamentoArea').innerHTML += '<div id="{{ elemento.nome }}" class="painel" style="position: absolute; top: {{ elemento.top }}px; left: {{ elemento.left }}px; width: {{ elemento.width }}px; height: {{ elemento.height }}px; border: {{ elemento.border }}; border-top: {{ elemento.bordertop }}; border-bottom: {{ elemento.borderbottom }}; border-left: {{ elemento.borderleft }}; border-right: {{ elemento.borderright }};"></div>'
+        }
+        if('{{ elemento.nome }}'.substring(0, 5) == 'input'){
+            document.getElementById('orcamentoArea').innerHTML += '<input name="{{ elemento.name }}" id="{{ elemento.nome }}" class="inputInformation" autocomplete="off" datalist="off" style="position: absolute; top: {{ elemento.top }}px; left: {{ elemento.left }}px; width: {{ elemento.width }}px; height: {{ elemento.height }}px; font-size: {{ elemento.fontsize }}px; border: {{ elemento.border }}; border-top: {{ elemento.bordertop }}; border-bottom: {{ elemento.borderbottom }}; border-left: {{ elemento.borderleft }}; border-right: {{ elemento.borderright }}; background-color: {{ elemento.backgroundcolor }}; text-align: {{ elemento.textalign }};" onmousedown="windowButtonRight({{ elemento.nome }})">'
+        }
+        if('{{ elemento.nome }}' == 'marca_empresa'){
+            document.getElementById('orcamentoArea').innerHTML += '<div id="{{ elemento.nome }}" class="img_edit" style="position: absolute; top: {{ elemento.top }}px; left: {{ elemento.left }}px; width: {{ elemento.width }}px; height: {{ elemento.height }}px; font-size: {{ elemento.fontsize }}px; border: {{ elemento.border }}; border-top: {{ elemento.bordertop }}; border-bottom: {{ elemento.borderbottom }}; border-left: {{ elemento.borderleft }}; border-right: {{ elemento.borderright }}; background-color: {{ elemento.backgroundcolor }}; "></div>'
+        }
+        if('{{ elemento.nome }}' != 'marca_empresa' && '{{ elemento.nome }}'.substring(0, 9) != 'paragrafo' && '{{ elemento.nome }}'.substring(0, 6) != 'painel' && '{{ elemento.nome }}'.substring(0, 5) != 'input'){
+            document.getElementById('orcamentoArea').innerHTML += '<input id="{{ elemento.nome }}" autocomplete="off" datalist="off" style="position: absolute; top: {{ elemento.top }}px; left: {{ elemento.left }}px; width: {{ elemento.width }}px; height: {{ elemento.height }}px; font-size: {{ elemento.fontsize }}px; border: {{ elemento.border }}; border-top: {{ elemento.bordertop }}; border-bottom: {{ elemento.borderbottom }}; border-left: {{ elemento.borderleft }}; border-right: {{ elemento.borderright }}; background-color: {{ elemento.backgroundcolor }}; text-align: {{ elemento.textalign }};" disabled>'
+        }
+        if('{{ elemento.nome }}'.substring(0, 9) == 'paragrafo'){
+            document.getElementById('orcamentoArea').innerHTML += '<p id="{{ elemento.nome }}" style="position: absolute; top: {{ elemento.top }}px; left: {{ elemento.left }}px; width: {{ elemento.width }}px; height: {{ elemento.height }}px; font-size: {{ elemento.fontsize }}px; background-color: {{ elemento.backgroundcolor }}; text-align: {{ elemento.textalign }};">{{ elemento.innerhtml }}</p>'
+        }
+        // if('{{ elemento.nome }}' == 'prefisao_entrega'){
+        //     document.getElementById('orcamentoArea').innerHTML += '<p id="{{ elemento.nome }}" style="position: absolute; top: {{ elemento.top }}px; left: {{ elemento.left }}px; width: {{ elemento.width }}px; height: {{ elemento.height }}px; font-size: {{ elemento.fontsize }}px; background-color: {{ elemento.backgroundcolor }}; text-align: {{ elemento.textalign }};">{{ elemento.innerhtml }}</p>'
+        // }
+    </script>
+   {% endfor %}
+   
+   <script>
+       
+       if(document.getElementById('numero_telefone') != null){
+        document.getElementById('numero_telefone').value = "{{ user.numero_telefone }}"
+       }
+       if(document.getElementById('numero_fixo') != null){
+        document.getElementById('numero_fixo').value = "{{ user.numero_fixo }}"
+       }
+       if(document.getElementById('bairro') != null){
+        document.getElementById('bairro').value = "{{ user.bairro }}"
+       }
+       if(document.getElementById('cidade') != null){
+        document.getElementById('cidade').value = "{{ user.cidade }}"
+       }
+       if(document.getElementById('estado') != null){
+        document.getElementById('estado').value = "{{ user.estado }}"
+       }
+       if(document.getElementById('marca_empresa') != null){
+        document.getElementById('marca_empresa').style.backgroundImage = "url('{{ user.imagem_empresa }}')"
+       }
+       if(document.getElementById('cep') != null){
+        document.getElementById('cep').value = "{{ user.cep }}"
+       }
+       if(document.getElementById('endereco') != null){
+        document.getElementById('endereco').value = "{{ user.endereco }}"
+       }
+       if(document.getElementById('nome_empresa') != null){
+        document.getElementById('nome_empresa').value = "{{ user.nome_empresa }}"
+       }
+       if(document.getElementById('email') != null){
+        document.getElementById('email').value = "{{ user.email }}"
+       }
+       if(document.getElementById('cnpj') != null){
+        document.getElementById('cnpj').value = "{{ user.cnpj }}"
+       }
+    
+       if(fCliente){
+        $("[name='cliente']").attr('onclick', 'openOptionCliente()')
+        $("[name='endereco_cliente']").attr('onclick', 'openOptionCliente()')
+        $("[name='telefone_cliente']").attr('onclick', 'openOptionCliente()')
+       }
+
+       if($("[name='telefone_cliente']")){
+        $("[name='telefone_cliente']").val('+55 (41) 9')
+        $("[name='telefone_cliente']").attr('onkeyup', 'mascaraTel()')
+       }
+       if($("[name='mao_obra']")){
+        $("[name='mao_obra']").attr('onkeyup', 'calculaTotal()')
+       }
+       if($("[name='total_pecas']")){
+        $("[name='total_pecas']").attr('onkeyup', 'calculaTotal()')
+       }
+
+       function openOptionCliente(){
+         let windowSelectCliente = document.getElementById('windowSelectCliente')
+         if(windowSelectCliente.hidden){
+          windowSelectCliente.hidden = false
+         }else{
+          windowSelectCliente.hidden = true
+         }
+       }
+
+       function fecharWindowLucro(alternativ){
+        if(alternativ == 1){
+            document.getElementById('windowLucro').hidden = false
+            document.getElementById('btnWindowLucro').hidden = true
+        }else{
+            document.getElementById('windowLucro').hidden = true
+            document.getElementById('btnWindowLucro').hidden = false
+        }
+       }
+
+
+      //  if($(window).width() <= 700){
+      //   let elemento = document.getElementById('orcamentoArea')
+      //   elemento.style.transform = 'scale(0.7, 0.8)'
+      //   elemento.style.right = '33%'
+      //   elemento.style.top = '-15%'
+      //   elemento.style.marginBottom = '-7rem'
+      // }
+      // if($(window).width() <= 400){
+      //   let elemento = document.getElementById('orcamentoArea')
+      //   elemento.style.transform = 'scale(0.7, 0.8)'
+      //   elemento.style.right = '46%'
+      //   elemento.style.top = '-15%'
+      //   elemento.style.marginBottom = '-7rem'
+      //   document.querySelector('#btnTimerDate').style.marginRight = '20px'
+      // }
+
+
+      
+      document.getElementsByName('data')[0].value = new Date().toLocaleDateString()
+
+      let unicId = 0
+      let unicId2 = 0
+      let unicId3 = 0
+      function addOrcamentoSistem(){
+        let informations = {}
+        let lucroOrcamento = {}
+
+        let inputs = document.querySelectorAll('.inputInformation')
+        for(let i=0; i < inputs.length; i++){
+          if(inputs[i].name == 'discriminacao'){
+            unicId++
+            let nomeArr = inputs[i].name + unicId
+            informations[nomeArr] = inputs[i].value
+          }else if(inputs[i].name == 'quantidade'){
+            unicId2++
+            let nomeArr = inputs[i].name + unicId2
+            informations[nomeArr] = inputs[i].value
+          }else if(inputs[i].name == 'valor'){
+            unicId3++
+            let nomeArr = inputs[i].name + unicId3
+            informations[nomeArr] = inputs[i].value
+          }else{
+            informations[inputs[i].name] = inputs[i].value
+          }
+        }
+        informations['quantLg'] = unicId
+
+        if($("#input_mao_obra").val() != ''){
+          lucroOrcamento['valor_mao_obra'] = $("#input_mao_obra").val()
+        }
+        if($("#input_valor_peca_cliente").val() != ''){
+          lucroOrcamento['valor_peca_cliente'] = $("#input_valor_peca_cliente").val()
+        }
+        if($("#input_valor_peca_real").val() != ''){
+          lucroOrcamento['valor_peca_real'] = $("#input_valor_peca_real").val()
+        }
+        if($("#input_valor_material").val() != ''){
+          lucroOrcamento['valor_material'] = $("#input_valor_material").val()
+        }
+        if($("#input_valor_lavagem").val() != ''){
+          lucroOrcamento['valor_lavagem'] = $("#input_valor_lavagem").val()
+        }
+        
+        informations['lucro_orcamento'] = lucroOrcamento
+
+              $.ajax({
+                  url: "{{ url('addOrcamentoSistem/') }}",
+                  method: 'POST',
+                  data: {
+                    'informations': informations
+                  },
+                  success: function (data) {
+                    if(data == 'ok'){
+                      location.href = "{{ url('orcamentos/') }}"
+                    }
+                  }
+              })
+      }
+
+
+      function calculaTotal(){
+         let total
+
+          let maoObra = Number(($("[name='mao_obra']").val()).replace(' ', '').replace('R', '0').replace('$', '0').replace('.', '').replace(',', '.'))
+
+          if(maoObra || maoObra == 0){
+            $("#input_mao_obra").val(maoObra.toLocaleString('pt-br',{minimumFractionDigits: 2}))
+          }else{
+            $("#input_mao_obra").val()
+          }
+
+          let totalPecas = Number(($("[name='total_pecas']").val()).replace(' ', '').replace('R', '0').replace('$', '0').replace('R$', '0').replace('.', '').replace(',', '.'))
+
+          if(totalPecas || totalPecas == 0){
+            $("#input_valor_peca_cliente").val(totalPecas.toLocaleString('pt-br',{minimumFractionDigits: 2}))
+          }else{
+            $("#input_valor_peca_cliente").val()
+          }
+
+          total = maoObra + totalPecas
+          if(total || total == 0){
+            $("[name='total']").val('R$ '+total.toLocaleString('pt-br',{minimumFractionDigits: 2}))
+          }else{
+            $("[name='total']").val()
+          }
+       }
+
+       function calcularLucro(){
+        let totalLucro
+
+        
+        let peca_cliente = Number($("#input_valor_peca_cliente").val().replace('.', '').replace(',', '.'))
+        
+        let peca_real = Number($("#input_valor_peca_real").val().replace('.', '').replace(',', '.'))
+        
+        let mao_obra = Number($("#input_mao_obra").val().replace('.', '').replace(',', '.'))
+
+        let material = Number($("#input_valor_material").val().replace('.', '').replace(',', '.'))
+
+        let lavagem = Number($("#input_valor_lavagem").val().replace('.', '').replace(',', '.'))
+
+        totalLucro = (((peca_cliente - peca_real) - material) - lavagem) + mao_obra
+        
+        $("#valor_total_lucro").val(totalLucro.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'}))
+       }
+
+
+       function mascaraTel(){
+          let strInput = $("[name='telefone_cliente']").val()
+            if(strInput.length == 14){
+              $("[name='telefone_cliente']").val(strInput + '-')
+            }
+       }
+
+    sinalRote('documentos')
+  </script>
+
+  {% endblock %}

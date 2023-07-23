@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkAdmin</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/checkout/">
+
+    <link rel="stylesheet" href="../site/bootstrap/css/bootstrap.min.css">
+    <!-- ICON WORKADMIN -->
+    <link rel="shortcut icon" href="../site/img/workadmin-fundo-removido.png" type="image/x-icon">  
+
+    <style>
+        .container {
+  max-width: 960px;
+}
+    html{
+        user-select: none;
+    }
+
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+      .b-example-divider {
+        width: 100%;
+        height: 3rem;
+        background-color: rgba(0, 0, 0, .1);
+        border: solid rgba(0, 0, 0, .15);
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+      }
+
+      .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+      }
+
+      .bi {
+        vertical-align: -.125em;
+        fill: currentColor;
+      }
+
+      .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+      }
+
+      .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .bd-mode-toggle {
+        z-index: 1500;
+      }
+      .btn-primary {
+--bs-btn-color: #fff;
+--bs-btn-bg: #0d85fd;
+--bs-btn-border-color: #0d8dfd;
+--bs-btn-hover-color: #fff;
+--bs-btn-hover-bg: #0b6ed7;
+--bs-btn-hover-border-color: #0a7aca;
+--bs-btn-focus-shadow-rgb: 49, 132, 253;
+--bs-btn-active-color: #fff;
+--bs-btn-active-bg: #0a6dca;
+--bs-btn-active-border-color: #0a61be;
+--bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+--bs-btn-disabled-color: #fff;
+--bs-btn-disabled-bg: #0d8dfd;
+--bs-btn-disabled-border-color: #0d69fd;
+opacity: 0.7;
+}
+
+.btn-outline-primary {
+--bs-btn-color: #0d91fd;
+--bs-btn-border-color: #0d89fd;
+--bs-btn-hover-color: #fff;
+--bs-btn-hover-bg: #0d81fd;
+--bs-btn-hover-border-color: #0d8dfd;
+--bs-btn-focus-shadow-rgb: 13, 110, 253;
+--bs-btn-active-color: #fff;
+--bs-btn-active-bg: #0d85fd;
+--bs-btn-active-border-color: #0d7dfd;
+--bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+--bs-btn-disabled-color: #0d79fd;
+--bs-btn-disabled-bg: transparent;
+--bs-btn-disabled-border-color: #0d7dfd;
+opacity: 0.7;
+}
+
+.bg-colorWork{
+    background-color: #0d91fd;
+    opacity: 0.7;
+}
+.text-colorWork{
+    color: #0d91fd;
+    opacity: 0.7;
+}
+    </style>
+
+  </head>
+  <body class="bg-body-tertiary">
+
+<div class="container">
+  <main>
+    <div class="py-5 text-center">
+      <img class="d-block mx-auto mb-4" src="../site/img/workadmin-fundo-removido.png" alt="" width="77" height="77">
+      <h2>Realizar pagamento</h2>
+      <p class="lead">Você está prestes a efetuar o pagamento da mensalidade do WorkAdmin.</p>
+    </div>
+
+    <div class="row g-5">
+      <div class="col-md-5 col-lg-4 order-md-last">
+        <h4 class="d-flex justify-content-between align-items-center mb-3">
+          <span class="text-colorWork">Resumo</span>
+          <span class="badge bg-colorWork rounded-pill">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
+              </svg>
+          </span>
+        </h4>
+        <ul class="list-group mb-3">
+          <li class="list-group-item d-flex justify-content-between lh-sm">
+            <div>
+              <h6 class="my-0">WorkAdmin</h6>
+              <small class="text-body-secondary" id="info"> </small>
+            </div>
+            <span class="text-body-secondary" id="valor"> </span>
+        </li>
+        
+        <li class="list-group-item d-flex justify-content-between">
+            <span>Total (BRL)</span>
+            <strong id="total"> </strong>
+        </li>
+    </ul>
+    <a href="{{ url('planos/') }}" class="text-decoration-none badge bg-colorWork rounded-pill position-absolute">Trocar plano</a>
+      </div>
+      <div class="col-md-7 col-lg-8">
+          <h4 class="mb-3">Forma de pagamento</h4>
+
+          <div class="my-3">
+            <div class="form-check">
+              <input id="pix" name="paymentMethod" type="radio" class="form-check-input" checked="">
+              <label class="form-check-label" for="pix">Pix</label>
+            </div>
+            <div class="form-check">
+              <input id="debit" name="paymentMethod" type="radio" class="form-check-input" disabled>
+              <label class="form-check-label" for="debit">Débito</label>
+            </div>
+            <div class="form-check">
+              <input id="credit" name="paymentMethod" type="radio" class="form-check-input" disabled>
+              <label class="form-check-label" for="credit">Crédito</label>
+            </div>
+          </div>
+
+          {% for plano in planos %}
+          <script>
+            document.getElementById('info').innerHTML += "{{ plano.nome }}"
+            document.getElementById('valor').innerHTML = 'R$ '+ Number('{{ plano.valor }}').toLocaleString('pt-br',{minimumFractionDigits: 2})
+            document.getElementById('total').innerHTML = 'R$ '+ Number('{{ plano.valor }}').toLocaleString('pt-br',{minimumFractionDigits: 2})
+          </script>
+        <form action="{{ url('sistem_pix_pagbank/') }}" method="post">
+
+          <div class="row gy-3">
+            <div class="col-md-6">
+              <label for="cpf" class="form-label">CPF / CNPJ</label>
+              <input type="text" class="form-control" name="cpf" id="text" placeholder="CPF/CNPJ" onkeyup="mascara()" required>
+              <small class="text-body-secondary">Este campo é obrigatório para a geração do código PIX e do QRCode.</small>
+            </div>
+          </div>
+
+          <hr class="my-4">
+
+          <input type="text" name="id_plano" value="{{ plano.id }}" hidden>
+          <input type="text" name="id_pagwork" value="{{ id_pagwork }}" hidden>
+
+          <button class="w-100 btn btn-primary btn-lg" type="submit">Finalizar</button>
+        </form>
+        {% endfor %}
+      </div>
+    </div>
+  </main>
+
+  <footer class="my-5 pt-5 text-body-secondary text-center text-small">
+    <p class="mb-1">© 2023 Zambiank Tecnologias</p>
+    <ul class="list-inline">
+      <li class="list-inline-item"><a href="https://zambianktecnologias.com.br/termos_de_uso/" target="_blank">Termos</a></li>
+      <li class="list-inline-item"><a href="https://zambianktecnologias.com.br/contato/" target="_blank">Suporte</a></li>
+    </ul>
+  </footer>
+</div>
+<script src="/docs/5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+
+    <script>
+
+        function mascara(){
+            let text = document.getElementById('text').value
+            if(text.length == 11){
+                let cpf = text.replace(/\D/g, '').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d{1,2})$/, '$1-$2');  
+    
+                document.getElementById('text').value = cpf
+            }else if(text.length == 14){
+                let cnpj = text.replace(/\D/g, '').replace(/^(\d{2})(\d)/, '$1.$2').replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3').replace(/\.(\d{3})(\d)/, '.$1/$2').replace(/(\d{4})(\d)/, '$1-$2')
+
+                document.getElementById('text').value = cnpj
+            }else{
+                document.getElementById('text').value = text.replace(/\./g, '').replace(/\-/g, '').replace('/', '')
+            }
+        }
+
+        if("{{ aviso }}" == 'invalid'){
+          document.getElementById('text').classList += " invalid"
+        }
+
+    </script>
+
+</body></html>

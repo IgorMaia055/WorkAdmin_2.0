@@ -1,0 +1,211 @@
+{% extends 'body.html' %}
+
+  {% block body %}
+
+  <style>
+    .perfil{
+        height: 10rem;
+        width: 12rem;
+    }
+/* Esconde o input */
+input[type='file'] {
+  display: none
+}
+
+/* Aparência que terá o seletor de arquivo */
+label {
+  margin: 10px;
+  padding: 6px 20px
+}
+.listBorder{
+  width: 20rem;
+}
+  </style>
+
+  <br><br>
+
+  <div class="feature col text-center">
+    {% if user.imagem_empresa != null %}
+      <img class="d-inline-flex text-bg-light rounded-3 perfil camera" src="{{ user.imagem_empresa }}">
+    {% else %}
+      <img class="d-inline-flex text-bg-light rounded-3 perfil camera" src="../site/img/image.svg">
+    {% endif %}
+
+      <br>
+          <label for='imagem-usuario' class="btn btn-primary"><svg class="bi pe-none" width="26" height="26" role="img" aria-label="camera"><use xlink:href="#camera"></use></svg></label>
+
+          <input type="file" id="imagem-usuario" onchange="converterImagem();"  accept="image/*">
+
+    <br><br>
+    <h3 class="fs-2 text-body-emphasis">{{ user.nome_empresa }}</h3>
+    <h5 class="text-body-emphasis">{{ user.nome }}</h5>
+    <br>
+    <div class="card-body">
+      <ul class="list-group" style="align-items: center;">
+        <li class="list-group-item d-flex justify-content-between align-items-center listBorder">
+          {{ user.endereco }}
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center listBorder">
+          {{ user.cep }}
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center listBorder">
+          {{ user.email }}
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center listBorder">
+          {{ user.numero_telefone }}
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center listBorder">
+          {{ user.numero_fixo }}
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center listBorder">
+          {{ user.bairro }}
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center listBorder">
+          {{ user.cidade }}
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center listBorder">
+          {{ user.estado }}
+        </li>
+      </ul>
+    </div>
+
+      <br>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#infoEdit">
+      Editar Informações
+      <svg class="bi pe-none" width="16" height="16" role="img" aria-label="edit"><use xlink:href="#edit"></use></svg>
+    </button>
+    
+  </div>
+
+
+  <!-- Editar informações -->
+<div class="modal fade" id="infoEdit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Editar informações</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="{{ url('salvarInfoUser/') }}">
+        <ul class="list-group" style="align-items: center;">
+          <li class="list-group-item d-flex justify-content-between align-items-center listBorder">
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" name="endereco" value="{{ user.endereco }}" aria-describedby="basic-addon2">
+              <span class="input-group-text" id="basic-addon2">
+                <svg class="bi pe-none" width="16" height="16" role="img" aria-label="edit"><use xlink:href="#edit"></use></svg>
+              </span>
+            </div>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center listBorder">
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" name="cep" value="{{ user.cep }}" aria-describedby="basic-addon2">
+              <span class="input-group-text" id="basic-addon2">
+                <svg class="bi pe-none" width="16" height="16" role="img" aria-label="edit"><use xlink:href="#edit"></use></svg>
+              </span>
+            </div>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center listBorder">
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" name="email" value="{{ user.email }}" aria-describedby="basic-addon2">
+              <span class="input-group-text" id="basic-addon2">
+                <svg class="bi pe-none" width="16" height="16" role="img" aria-label="edit"><use xlink:href="#edit"></use></svg>
+              </span>
+            </div>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center listBorder">
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" name="numero_telefone" value="{{ user.numero_telefone }}" aria-describedby="basic-addon2">
+              <span class="input-group-text" id="basic-addon2">
+                <svg class="bi pe-none" width="16" height="16" role="img" aria-label="edit"><use xlink:href="#edit"></use></svg>
+              </span>
+            </div>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center listBorder">
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" name="numero_fixo" value="{{ user.numero_fixo }}" aria-describedby="basic-addon2">
+              <span class="input-group-text" id="basic-addon2">
+                <svg class="bi pe-none" width="16" height="16" role="img" aria-label="edit"><use xlink:href="#edit"></use></svg>
+              </span>
+            </div>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center listBorder">
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" name="bairro" value="{{ user.bairro }}" aria-describedby="basic-addon2">
+              <span class="input-group-text" id="basic-addon2">
+                <svg class="bi pe-none" width="16" height="16" role="img" aria-label="edit"><use xlink:href="#edit"></use></svg>
+              </span>
+            </div>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center listBorder">
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" name="cidade" value="{{ user.cidade }}" aria-describedby="basic-addon2">
+              <span class="input-group-text" id="basic-addon2">
+                <svg class="bi pe-none" width="16" height="16" role="img" aria-label="edit"><use xlink:href="#edit"></use></svg>
+              </span>
+            </div>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center listBorder">
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" name="estado" value="{{ user.estado }}" aria-describedby="basic-addon2">
+              <span class="input-group-text" id="basic-addon2">
+                <svg class="bi pe-none" width="16" height="16" role="img" aria-label="edit"><use xlink:href="#edit"></use></svg>
+              </span>
+            </div>
+          </li>
+        </ul>
+
+      </div>
+      <div class="modal-footer">
+        <div type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancelar</div>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>
+  <script>
+    function converterImagem() {
+
+// Receber o arquivo do formulario
+var receberArquivo = document.querySelector("#imagem-usuario").files;
+//console.log(receberArquivo);
+
+// Verificar se existe o arquivo
+if (receberArquivo.length > 0) {
+
+    // Carregar a imagem
+    var carregarImagem = receberArquivo[0];
+
+    var lerArquivo = new FileReader();
+
+    lerArquivo.onload = function(arquivoCarregado) {
+        // Converter a imagem para base64
+        var imagemBase64 = arquivoCarregado.target.result; 
+        console.log(imagemBase64);
+
+        var novaImagem = document.querySelector(".camera");
+
+        novaImagem.src = imagemBase64;
+
+        $(document).ready(function (){
+              $.ajax({
+                  url: "{{ url('insert_imagem_perfil/') }}",
+                  method: 'POST',
+                  data: {
+                    'base64': imagemBase64
+                  },
+                  success: function (data) {
+                    document.querySelector('.camera').src = data
+                  }
+              })
+      })
+    }
+
+    // O metodo readAsDataURL e usado para ler o conteudo
+    lerArquivo.readAsDataURL(carregarImagem);
+}
+}
+  </script>
+
+  {% endblock %}

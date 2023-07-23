@@ -1,0 +1,510 @@
+{% extends 'body.html' %}
+
+  {% block body %}
+
+  <style>
+    #modalEsticado{
+      width: 100%;
+      height: 100vh;
+    }
+
+    .table-invisibled {
+  --bs-table-color: #000000b3;
+  --bs-table-bg: #f8f9fa00;
+  --bs-table-border-color: #dfe0e1;
+  --bs-table-striped-bg: #ecedee;
+  --bs-table-striped-color: #000;
+  --bs-table-active-bg: #dfe0e1;
+  --bs-table-active-color: #000;
+  --bs-table-hover-bg: #e5e6e7;
+  --bs-table-hover-color: #000;
+  color: var(--bs-table-color);
+  border-color: var(--bs-table-border-color);
+  font-size: 13px;
+}
+
+.bol{
+  height: 1rem;
+  width: 1rem;
+  margin-left: 0.7rem;
+  margin-top: 0.3rem;
+  border-radius: 10rem;
+}
+
+.andamento{
+  background-color: rgba(255, 5, 5, 0.416);
+}
+
+.entradaCash{
+  background-color: rgba(255, 163, 5, 0.416);
+}
+
+.dinheiroRecebidoAndamento{
+  background-color: rgba(226, 255, 5, 0.426);
+}
+
+.finalizadoDinheiroFalta{
+  background-color: rgba(84, 255, 5, 0.416);
+}
+
+.finalizadoPago{
+  background-color: rgba(30, 215, 6, 0.679);
+}
+
+.table{
+  font-size: 0.8rem;
+}
+th{
+  font-size: 0.8rem;
+}
+
+#divColor{
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-top: 0.2rem;
+  margin-left: 0.4rem;
+  border-radius: 30%;
+  border: 1px solid rgba(0, 0, 0, 0.295);
+}
+.eyeClick{
+  text-decoration: none;
+  color: #000;
+  background-color: #00000000;
+  border: 0;
+}
+.colunaTable{
+  padding-right: 5rem;
+}
+  </style>
+<script>
+  let arrOrcamentosDelete = []
+</script>
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h4>Orçamentos</h4>
+    <div class="btn-group me-3">
+
+        <div class="input-group mb-0">
+          <input type="text" id="busca" class="form-control" type="search" placeholder="Pesquisar" aria-label="Pesquisar" style="margin-right: 1rem;">
+        </div>
+
+<!-- dropstart button -->
+<div class="btn-group">
+  <button type="button" class="btn btn-outline-primary dropdown-toggle rounded" data-bs-toggle="dropdown" aria-expanded="false">
+
+    <svg class="bi pe-none" width="26" height="26" role="img" aria-label="orcamento"><use xlink:href="#orcamento"></use></svg>
+
+  </button>
+  <ul class="dropdown-menu">
+    {% if user.tipo_orcamento != null %}
+    <li><a href="{{ url('orcamento/criar') }}" class="dropdown-item">Criar orçamento
+      <svg class="bi pe-none" width="16" height="16" role="img" aria-label="plus"><use xlink:href="#plus"></use></svg>
+    </a></li>
+    {% else %}
+    <li><button class="dropdown-item" type="button"
+      data-bs-toggle="modal" data-bs-target="#tiposOrcamentos">Criar orçamento
+      <svg class="bi pe-none" width="16" height="16" role="img" aria-label="plus"><use xlink:href="#plus"></use></svg>
+    </button></li>
+    {% endif %}
+    <li><button class="dropdown-item" type="button"
+      data-bs-toggle="modal" data-bs-target="#tiposOrcamentos">
+      Tipos de orçamentos
+      <svg class="bi pe-none" width="18" height="18" role="img" aria-label="files"><use xlink:href="#files"></use></svg>
+    </button></li>
+
+    <li><button class="dropdown-item" type="button">Criar seu tipo
+      <svg class="bi pe-none" width="18" height="18" role="img" aria-label="htmlOrcamento"><use xlink:href="#htmlOrcamento"></use></svg>
+    </button></li>
+  </ul>
+</div>
+<!-- dropstart button -->
+      
+      <button id="deletar" class="btn btn-outline-danger rounded" onclick="deletarOrcamento()" disabled><svg class="bi pe-none" width="20" height="26" role="img" aria-label="delete"><use xlink:href="#delete"></use></svg></button>
+    </div>
+  </div>
+
+  <br>
+
+  <div class="table-responsive">
+    {% if tfOrca %}
+  <table class="table table-striped table-sm"> 
+    <thead class="table-invisibled">
+      <tr>
+        <th scope="col"></th>
+        <th scope="col"></th>
+        <th scope="col" style="padding-right: 5rem;">Cliente</th>
+        <th scope="col" style="padding-right: 5rem;">Telefone</th>
+        <th scope="col" style="padding-right: 5rem;">Veículo</th>
+        <th scope="col" style="padding-right: 5rem;">Placa</th>
+        <th scope="col" style="padding-right: 5rem;">Data</th>
+        <th scope="col" style="padding-right: 3rem;">Saída</th>
+        <th scope="col">Cor</th>
+        <th scope="col">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for orcamento in orcamentos %}
+      <tr>
+        <th>
+          <input class="form-check-input" type="checkbox" value="{{ orcamento.id }}" id="checkOrcamento{{ orcamento.id }}">
+        </th>
+        <th>
+          <form action="{{ url('orcamento/') }}" method="POST">
+            <input type="text" name="id_orcamento" value="{{ orcamento.id }}" hidden>
+            <button type="submit" class="eyeClick" id="orcamentoEye{{ orcamento.id }}">
+              <svg class="bi pe-none" width="16" height="16" role="img" aria-label="Eye"><use xlink:href="#eye"></use></svg>
+            </button>
+          </form>
+        </th>
+        <td id="cliente{{ orcamento.id }}"></td>
+        <td id="telefone{{ orcamento.id }}"></td>
+        <td>{{ orcamento.carro }}</td>
+        <td>{{ orcamento.placa }}</td>
+        <td id="data_entrada{{ orcamento.id }}"></td>
+        <td id="data_saida{{ orcamento.id }}"></td>
+        <td>
+          <div class="colorOrcamento{{ orcamento.id }}" id="divColor" type="button" data-bs-toggle="modal" data-bs-target="#corOrcamento{{ orcamento.id }}"></div>
+        </td>
+        <td>
+          <div class="bol bol{{ orcamento.id }}" type="button" data-bs-toggle="modal" data-bs-target="#statesOrcamento{{ orcamento.id }}"></div>
+
+          <script>
+              $("#checkOrcamento{{ orcamento.id }}").on('change', () => {
+                let check = document.getElementById('checkOrcamento{{ orcamento.id }}')
+                if(check.checked){
+                  arrOrcamentosDelete.push(check.value)
+                }else{
+                  let index = arrOrcamentosDelete.indexOf(check.value)
+                  arrOrcamentosDelete.splice(index, 1)
+                }
+
+                if(arrOrcamentosDelete.length != 0){
+                  let deletar = document.getElementById("deletar")
+                  deletar.disabled = false
+                }else{
+                  deletar.disabled = true
+                }
+              })
+
+            "{% if orcamento.status == 0 %}"
+            document.querySelector(".bol{{ orcamento.id }}").classList += ' andamento'
+            "{% endif %}"
+            "{% if orcamento.status == 1 %}"
+            document.querySelector(".bol{{ orcamento.id }}").classList += ' entradaCash'
+            "{% endif %}"
+            "{% if orcamento.status == 2 %}"
+            document.querySelector(".bol{{ orcamento.id }}").classList += ' dinheiroRecebidoAndamento'
+            "{% endif %}"
+            "{% if orcamento.status == 3 %}"
+            document.querySelector(".bol{{ orcamento.id }}").classList += ' finalizadoDinheiroFalta'
+            "{% endif %}"
+            "{% if orcamento.status == 4 %}"
+            document.querySelector(".bol{{ orcamento.id }}").classList += ' finalizadoPago'
+            "{% endif %}"
+          </script>
+        </td>
+      </tr>
+
+<!-- Começo do Modal de cor do orçamento -->
+<div class="modal fade" id="corOrcamento{{ orcamento.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Cor do veículo</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="{{ url('salvarCor/') }}">
+
+          <input type="text" name="id_orcamento" value="{{ orcamento.id }}" hidden>
+
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="nomeTinta{{ orcamento.id }}" placeholder="Nome da tinta" name="nome" required>
+            <label for="nomeTinta{{ orcamento.id }}">Nome da tinta</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="loja{{ orcamento.id }}" placeholder="Loja fornecedora" name="loja" required>
+            <label for="loja{{ orcamento.id }}">Loja fornecedora</label>
+          </div>
+          
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="codigoTinta{{ orcamento.id }}" placeholder="Código da tinta (Opcional)" name="codigo">
+                <label for="codigoTinta{{ orcamento.id }}">Código da tinta (Opcional)</label>
+              </div>
+        
+              <label for="corProxima{{ orcamento.id }}" class="form-label">Cor próxima</label>
+              <input type="color" class="form-control form-control-color" id="corProxima{{ orcamento.id }}" value="#00000000" name="corProxima">
+      </div>
+      <div class="modal-footer">
+
+
+        <div type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancelar</div>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+      </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+<!-- final do Modal de cor do orçamento -->
+
+    
+<!-- Começo do Modal de states -->
+<div class="modal fade" id="statesOrcamento{{ orcamento.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Situação do serviço</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="{{ url('salvarStatesOrcamento/') }}">
+
+          <label for="statesOrcamento{{ orcamento.id }}" class="form-label">Status do serviço</label>
+            <select name="statesOrcamento" id="statesOrcamento{{ orcamento.id }}" class="form-select">  
+              <option value="0">Em andamento</option>
+              <option value="1">Entrada recebida mas em andamento</option>
+              <option value="2">Valor total recebido mas em andamento</option>
+              <option value="3">Finalizado mas valor total pendente</option>
+              <option value="4">Finalizado e pago</option>
+            </select>
+              <script>
+                $("#statesOrcamento{{ orcamento.id }} option").filter(function() {
+                    return $(this).val() == '{{ orcamento.status }}';
+                }).prop("selected", true);
+              </script>
+             <br>
+             <div id="btnCashEntrada{{ orcamento.id }}" hidden>
+               <label for="entradaCashInput{{ orcamento.id }}" class="form-label">Qual o valor recebido de entrada?</label>
+               <div class="input-group mb-3">
+                 <span class="input-group-text">R$</span>
+                 <input type="text" class="form-control" name="cashEntrada" id="entradaCashInput{{ orcamento.id }}" >
+              </div>
+             </div>
+
+             <div id="investimentoServico{{ orcamento.id }}">
+               <p>Investimento no serviço</p>
+               <div class="form-check" id="">
+                <input class="form-check-input" type="checkbox" value="pago" id="investService{{ orcamento.id }}" name="investService">
+                <label class="form-check-label" for="investService">
+                  Já pago
+                </label>
+              </div>
+             </div>
+
+             <input type="text" name="id_orcamento" value="{{ orcamento.id }}" hidden>
+
+                <script>
+                  if("{{ investService(orcamento.id) }}" == 1){
+                    document.getElementById('investService{{ orcamento.id }}').checked = true
+                  }else{
+                    document.getElementById('investService{{ orcamento.id }}').checked = false
+                  }
+                
+              $(".bol{{ orcamento.id }}").on('click', () => {
+                var valor = $('#statesOrcamento{{ orcamento.id }} option:selected').val();
+                if(valor == '3' || valor == '4'){
+                  document.getElementById('investimentoServico{{ orcamento.id }}').hidden = true
+                }else{
+                  document.getElementById('investimentoServico{{ orcamento.id }}').hidden = false
+                }
+
+                if('{{ orcamento.status }}' == '1'){
+                    document.querySelector('#entradaCashInput{{ orcamento.id }}').value = '{{ orcamento.entrada_cash }}'
+                  document.getElementById('btnCashEntrada{{ orcamento.id }}').hidden = false
+                }
+              })
+
+              //Função para saber qual o states do orçamento e com isso fazer o botão de entradaCash aparecer ou desaparecer
+              $("#statesOrcamento{{ orcamento.id }}").on('change', () => {
+                var valor = $('#statesOrcamento{{ orcamento.id }} option:selected').val();
+                if(valor == '1'){
+                  document.querySelector('#entradaCashInput{{ orcamento.id }}').required = true
+                  document.querySelector('#btnCashEntrada{{ orcamento.id }}').hidden = false
+                }else{
+                  document.querySelector('#btnCashEntrada{{ orcamento.id }}').required = false
+                  document.querySelector('#entradaCashInput{{ orcamento.id }}').value = ''
+                  document.querySelector('#btnCashEntrada{{ orcamento.id }}').hidden = true
+                }
+
+                if(valor == '3' || valor == '4'){
+                  document.getElementById('investimentoServico{{ orcamento.id }}').hidden = true
+                }else{
+                  document.getElementById('investimentoServico{{ orcamento.id }}').hidden = false
+                }
+              })
+             </script>
+      </div>
+      <div class="modal-footer">
+
+        <div type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancelar</div>
+        <button class="btn btn-primary">Salvar</button>
+      </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+<!-- final do Modal de states -->
+
+
+      <script>
+        function deletarOrcamento(){
+          for(let i=0; i < arrOrcamentosDelete.length; i++){
+            $.ajax({
+                  url: "{{ url('deletarOrcamento/') }}",
+                  method: 'POST',
+                  data: {
+                    'id': arrOrcamentosDelete[i]
+                  },
+                  success: function (data) {
+                    if(data == 'ok'){
+                      window.location.href = "{{ url('orcamentos/') }}"
+                    }
+                  }
+               })
+          }
+        }
+
+        $("#data_entrada{{ orcamento.id }}").html((new Date('{{ orcamento.data_entrada }}')).toLocaleDateString('pt-BR', {timeZone: 'UTC'}))
+
+        "{% if orcamento.data_saida != '0000-00-00' and orcamento.data_saida != NULL %}"
+        $("#data_saida{{ orcamento.id }}").html((new Date('{{ orcamento.data_saida }}')).toLocaleDateString('pt-BR', {timeZone: 'UTC'}))
+        "{% endif %}"
+
+        "{% for cliente in clientes %}"
+          "{% if orcamento.id_cliente == cliente.id %}"
+              $("#cliente{{ orcamento.id }}").html("{{ cliente.nome }}")
+              $("#telefone{{ orcamento.id }}").html("{{ cliente.telefone }}")
+          "{% endif %}"
+        "{% endfor %}"
+
+        "{% for cor in cores %}"
+          "{% if cor.id == orcamento.id_cor %}"
+            document.querySelector(".colorOrcamento{{ orcamento.id }}").style.backgroundColor = "{{ cor.cor_proxima }}"
+
+            document.getElementById("nomeTinta{{ orcamento.id }}").value = '{{ cor.nome }}'
+            document.getElementById("loja{{ orcamento.id }}").value = '{{ cor.loja }}'
+            document.getElementById("codigoTinta{{ orcamento.id }}").value = '{{ cor.codigo_cor }}'
+            document.getElementById("corProxima{{ orcamento.id }}").value = '{{ cor.cor_proxima }}'
+          "{% endif %}"
+        "{% endfor %}"
+
+        </script>
+
+      {% endfor %}
+
+    </tbody>
+  </table>
+  {% else %}
+  <span>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-file-earmark-excel" viewBox="0 0 16 16">
+      <path d="M5.884 6.68a.5.5 0 1 0-.768.64L7.349 10l-2.233 2.68a.5.5 0 0 0 .768.64L8 10.781l2.116 2.54a.5.5 0 0 0 .768-.641L8.651 10l2.233-2.68a.5.5 0 0 0-.768-.64L8 9.219l-2.116-2.54z"/>
+      <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
+    </svg>
+  </span>
+    Nenhum orçamento encontrado
+  {% endif %}
+</div>
+
+<!-- todos os modals -->
+
+ <!-- começo do Modal escolha orçamento -->
+ <div class="modal fade" id="tiposOrcamentos" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" id="modalEsticado">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Escolha um tipo de orçamento para usar</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        
+        <div class="row">
+
+          {% for tipoOrcamento in tiposOrcamentos %}
+          <div class="col-sm-6 p-2">
+            <div class="form-check">
+              <input class="form-check-input" name="flexRadioDefault" type="radio" id="tipoLabel{{ tipoOrcamento.id }}">
+              <label for="tipoLabel{{ tipoOrcamento.id }}" class="card-title">{{ tipoOrcamento.nome }}</label>
+              <div class="card h-100" type="button" id="tipo{{ tipoOrcamento.id }}">
+                <img src="{{ tipoOrcamento.base64 }}" class="card-img-body" alt="{{ tipoOrcamento.nome }}">
+              </div>
+            </div>
+          </div>
+
+          <script>
+            if("{{ user.tipo_orcamento }}" != null){
+              document.getElementById('tipoLabel{{ user.tipo_orcamento }}').checked = true
+            }
+          </script>
+          {% endfor %}
+          
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Fechar</button>
+        <button type="button" class="btn btn-primary" id="confirmarEscolha">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- fim do Modal pagar conta -->
+
+<script>
+
+  $('#confirmarEscolha').on('click', () => {
+    "{% for tipoOrcamento in tiposOrcamentos %}"
+          if(document.querySelector('#tipoLabel{{ tipoOrcamento.id }}').checked){
+               $.ajax({
+                  url: "{{ url('update_tipo_orcamento/') }}",
+                  method: 'POST',
+                  data: {
+                    'id': '{{ tipoOrcamento.id }}'
+                  },
+                  success: function (data) {
+                    if(data == 'ok'){
+                      window.location.href = "{{ url('orcamento/criar') }}"
+                    }
+                  }
+               })
+          }
+    "{% endfor %}"
+  })
+
+
+  $("#busca").on('keyup', () => {
+      $.ajax({
+        url: "{{ url('pesquisa_orcamento/') }}",
+        method: 'POST',
+        data: {
+          'busca': $('#busca').val()
+        },
+        success: function (data) {
+          let dados = JSON.parse(data)
+          if(dados[0]){
+            buscaCliente(dados[0].id_cliente)
+          }
+        }
+     })
+  })
+
+  function buscaCliente(id_cliente){
+              // $.ajax({
+              //     url: "{{ url('busca_cliente/') }}",
+              //     method: 'POST',
+              //     data: {
+              //       'id_cliente': id_cliente
+              //     },
+              //     success: function (data) {
+              //       let dados = JSON.parse(data)
+              //       console.log(dados)
+              //     }
+              //  })
+              console.log(id_cliente)
+  }
+
+
+  sinalRote('documentos')
+</script>
+
+  {% endblock %}

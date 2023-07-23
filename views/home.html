@@ -1,0 +1,712 @@
+{% extends 'body.html' %}
+
+  {% block body %}
+
+  <style>
+    #padd{
+    margin-top: 1rem;
+  }
+  .menu {
+margin: 0;
+padding: 0;
+width: 200px;
+display: none;
+z-index: 5;
+position: absolute;
+}
+
+.listBorder{
+border: 1px solid rgba(0, 0, 0, 0.056);
+padding: 7px;
+border-radius: 0.4rem;
+}
+
+.pSmall{
+font-size: 14px;
+position: absolute;
+right: 15px; 
+top: 15px;
+color: rgba(30, 30, 31, 0.588);
+}
+
+.btnEyeCash{
+  border: 0;
+  background-color: rgba(240, 248, 255, 0);
+  position: absolute;
+  right: 20px;
+}
+
+.invisibledText{
+  color: rgba(240, 248, 255, 0);
+  background-image: linear-gradient(to right, #fbf8f8, #efeded, #faf8f8);
+  margin-left: 5rem;
+  margin-right: 5rem;
+}
+  </style>
+  
+  <script>
+    sinalRote('home')
+  </script>
+  <br>
+  <div class="row">
+    
+    <div class="col-sm-7">
+      
+      <div class="input-group mb-3">
+        <select class="form-select form-select-lg focus-ring focus-ring-info border" id="select_mes" onchange="buscaFC()">
+          <option>Selecione o mês</option>
+          
+        </select>
+        <script>
+          let arrMeses = [
+            'Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'
+          ]
+          let mesAtual = new Date().getMonth()
+          for(let i=0; i <= mesAtual; i++){
+            let n = i + 1
+            if(mesAtual == i){
+              document.getElementById('select_mes').innerHTML += '<option value="'+ n +'" selected>'+ arrMeses[i] +'</option>'
+            }else{
+              document.getElementById('select_mes').innerHTML += '<option value="'+ n +'">'+ arrMeses[i] +'</option>'
+            }
+          }
+        </script>
+        
+        <div class="bg-light input-group-text" id="basic-addon2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-calendar3" viewBox="0 0 16 16">
+            <path d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857V3.857z"/>
+            <path d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-6 mb-3 mb-sm-0">
+          <div class="card">
+            <div class="card-body">
+              <p class="card-text">Entrada</p>
+              <h5 class="card-title" id="entradas">
+                
+              </h5>
+              <p class="text-success">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                  <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                </svg>
+    
+                <span id="percentEntrada">
+                 
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+    
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-body">
+              <p class="card-text">Saída</p>
+              <h5 class="card-title" id="saidas"> 
+
+              </h5>
+
+              <p class="text-danger">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                  <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                </svg>
+    
+                <span id="percentSaida">
+
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-5" style="margin-top: 1rem;">
+      
+      <div class="card text-center">
+        <div class="card-header">
+          Lucro no mês
+          
+        <button class="btnEyeCash" onclick="viewCash()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-eye-slash-fill" viewBox="0 0 16 16">
+            <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588zM5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474L5.21 3.089z"/>
+            <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12-.708.708z"/>
+          </svg>
+        </button>
+
+        </div>
+        <div class="card-body">
+          <br>
+              <h5 class="card-title invisibledText" id="lucroMes">
+                
+              </h5>
+
+          <p class="card-text">Lucro no mês selecionado.</p>
+
+          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalFluxoCaixaMes">Ver detalhes</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+<br><br>
+  <div class="row">
+    <div class="col-sm-12">
+
+      <div class="card text-center">
+        <div class="card-header">
+          <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+              <button class="nav-link link-body-emphasis active" id="rote1" onclick="roteCard('rote1', 'cardBody1')">Contas a pagar</button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link link-body-emphasis" id="rote2" onclick="roteCard('rote2', 'cardBody2')">Contas a receber</button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link link-body-emphasis" id="rote3" onclick="roteCard('rote3', 'cardBody3')">Contas pagas</button>
+            </li>
+          </ul>
+          <p class="pSmall">
+            Clique para confimar pagamento
+          </p>
+        </div>
+        <div class="card-body" id="cardBody3" hidden>
+          
+          {% if quant_contasPagas > 0 %}
+          <ul class="list-group">
+            {% for conta_paga in contas_pagas %}
+            <li type="button" id="listContaPaga{{ conta_paga.id }}" class="list-group-item d-flex justify-content-between align-items-center listBorder" id="{{ conta_paga.id }}" data-bs-toggle="modal" data-bs-target="#modalDeleteContaPaga{{ conta_paga.id }}">
+                {{ resumirTxt(conta_paga.nome, 14, '...') }}
+                
+                <span class="badge bg-success rounded-pill">
+                  <span class="badge bg-light text-dark rounded-pill conta_paga_data" style="font-size: 12px;" id="spanVencimento2{{ conta_paga.id }}"> </span>
+                  R$ {{ conta_paga.valor }}
+                  <span class="badge rounded-pill" style="font-size: 12px;">Paga</span>
+                </span>
+              </li>
+
+            <script>
+              document.getElementById('spanVencimento2{{ conta_paga.id }}').innerHTML = "{{ conta_paga.data_pagamento }}".split('-').reverse().join('/');
+            </script>
+            {% endfor %}
+          </ul>
+          <!-- BTN modal ver tudo contas pagas-->
+          <button class="btn text-primary card-title" data-bs-toggle="modal" data-bs-target="#modalVertudoContasPagas">Ver tudo</button>
+          <!-- BTN modal ver tudo contas pagas-->
+          {% else %}
+          Nenhuma conta paga
+          {% endif %}
+
+         
+      </div>
+        <div class="card-body" id="cardBody2" hidden>
+            card body 2
+        </div>
+        <div class="card-body" id="cardBody1" style="position: relative;">
+          
+          {% if quant_contasPagar > 0 %}
+          
+          <ul class="list-group">
+          {% for conta_pagar in contas_pagar %}
+            <!-- BTN modal pagar conta-->
+            <li type="button" class="list-group-item d-flex justify-content-between align-items-center listBorder" data-bs-toggle="modal" data-bs-target="#modalPagarconta{{ conta_pagar.id }}">
+                {{ resumirTxt(conta_pagar.nome, 14, '...') }}
+                
+                <span class="badge bg-danger rounded-pill" id="valor{{ conta_pagar.id }}">
+                  R$ {{ conta_pagar.valor }}
+                  
+                </span>
+              </li>
+            <!-- BTN modal pagar conta-->
+
+            <script>
+              if("{{ conta_pagar.status }}" == '0'){
+                document.getElementById('valor{{ conta_pagar.id }}').classList = "badge bg-success rounded-pill"
+                document.getElementById('valor{{ conta_pagar.id }}').innerHTML += '<span class="badge rounded-pill" style="font-size: 12px;">Paga</span>'
+              }else if("{{ conta_pagar.vencimento }}" <= "{{ hoje }}"){
+                document.getElementById('valor{{ conta_pagar.id }}').classList = "badge bg-danger rounded-pill"
+                document.getElementById('valor{{ conta_pagar.id }}').innerHTML += '<span class="badge rounded-pill" style="font-size: 12px;">Vencida</span>'
+              }else if("{{ conta_pagar.vencimento }}" > "{{ hoje }}"){
+                document.getElementById('valor{{ conta_pagar.id }}').classList = "badge bg-warning rounded-pill"
+                document.getElementById('valor{{ conta_pagar.id }}').innerHTML += '<span class="badge rounded-pill" style="font-size: 12px;">A vencer</span>'
+              } 
+            </script>
+            {% endfor %}
+          </ul>
+            <!-- BTN modal ver tudo-->
+            <button class="btn text-primary card-title" id="vertudoBTN" data-bs-toggle="modal" data-bs-target="#modalVertudo">Ver tudo</button>
+            <!-- BTN modal ver tudo-->
+          {% else %}
+          Nenhuma conta a pagar
+          {% endif %}
+          <!-- BTN modal Conta a pagar-->
+          <button class="btn btn-primary" style="position: absolute; right: 2rem;" type="button" data-bs-toggle="modal" data-bs-target="#modalContaPagar">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
+            </svg>
+          </button>
+          <!-- BTN modal Conta a pagar-->
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+<br><br>
+  <div class="row">
+    <div class="col-sm-12">
+      <h5>Lucros em meses <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-check2-circle text-success" viewBox="0 0 16 16">
+        <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"/>
+        <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/>
+      </svg></h5>
+
+      <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
+
+    </div>
+  </div>
+
+  
+  <!-- todos os modals -->
+
+  <!-- começo do Modal conta a pagar -->
+  <div class="modal fade" id="modalContaPagar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Adicione uma nova conta a pagar</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+          <form action="{{ url('conta_pagar/') }}">
+                  <label for="nome_conta" class="form-label">Nome da conta</label>
+                  <input type="text" class="form-control" id="nome_conta" placeholder="Ex: Aluguel" name="nome_conta" required>
+            <br>
+            <div class="row">
+              <div class="col-sm-6">
+                <label for="valor_conta" class="form-label">Valor da conta</label>
+                <div class="input-group mb-3">
+                  <span class="input-group-text bg-danger text-light" id="valor_conta">R$</span>
+                  <input type="text" class="form-control" name="valor_conta" placeholder="0,00" required>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <label for="vencimento_conta" class="form-label">Vencimento da conta</label>
+                  <input type="date" class="form-control" name="vencimento_conta" id="vencimento_conta" required>
+              </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+          <div type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancelar</div>
+          <button type="submit" class="btn btn-primary">Adicionar</button>
+        </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- fim do Modal conta a pagar -->
+
+  {% for conta_paga in contas_pagas %}
+  <!-- começo do Modal delete conta paga -->
+  <div class="modal fade" id="modalDeleteContaPaga{{ conta_paga.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Deseja excluir a conta paga?</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+          <p>Ao clicar em excluir, a conta clicada será deletada.</p>
+          
+          <br>
+          <li id="listContaPaga{{ conta_paga.id }}" class="list-group-item d-flex justify-content-between align-items-center listBorder" id="{{ conta_paga.id }}" data-bs-toggle="modal" data-bs-target="#modalDeleteContaPaga{{ conta_paga.id }}">
+            {{ conta_paga.nome }}
+            
+            <span class="badge bg-success rounded-pill">
+              <span class="badge bg-light text-dark rounded-pill" style="font-size: 12px;" id="spanVencimento2{{ conta_paga.id }}"> </span>
+              R$ {{ conta_paga.valor }}
+              <span class="badge rounded-pill" style="font-size: 12px;">Paga</span>
+            </span>
+          </li>
+
+        </div>
+        <div class="modal-footer">
+          <div type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancelar</div>
+          <a href="{{ url('deletar_conta_paga/'~conta_paga.id) }}" class="btn btn-primary">Excluir</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- fim do Modal delete conta paga -->
+  {% endfor %}
+
+  <!-- começo do Modal ver tudo -->
+  <div class="modal fade" id="modalVertudo" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Todas as contas a pagar</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+          <ul class="list-group">
+            {% for conta_pagar_tudo in contas_pagar_tudo %}
+
+            <!-- BTN modal pagar conta-->
+            <li type="button" class="list-group-item d-flex justify-content-between align-items-center listBorder" data-bs-target="#modalPagarconta{{ conta_pagar_tudo.id }}" data-bs-toggle="modal">
+                {{ conta_pagar_tudo.nome }}
+                
+                <span class="badge bg-danger rounded-pill" id="tudo{{ conta_pagar_tudo.id }}">
+                  R$ {{ conta_pagar_tudo.valor }}
+                </span>
+              </li>
+            <!-- BTN modal pagar conta-->
+
+            <script>
+              if("{{ conta_pagar_tudo.status }}" == '0'){
+                document.getElementById('tudo{{ conta_pagar_tudo.id }}').classList = "badge bg-success rounded-pill"
+                document.getElementById('tudo{{ conta_pagar_tudo.id }}').innerHTML += '<span class="badge rounded-pill" style="font-size: 12px;">Paga</span>'
+              }else if("{{ conta_pagar_tudo.vencimento }}" <= "{{ hoje }}"){
+                document.getElementById('tudo{{ conta_pagar_tudo.id }}').classList = "badge bg-danger rounded-pill"
+                document.getElementById('tudo{{ conta_pagar_tudo.id }}').innerHTML += '<span class="badge rounded-pill" style="font-size: 12px;">Vencida</span>'
+              }else if("{{ conta_pagar_tudo.vencimento }}" > "{{ hoje }}"){
+                document.getElementById('tudo{{ conta_pagar_tudo.id }}').classList = "badge bg-warning rounded-pill"
+                document.getElementById('tudo{{ conta_pagar_tudo.id }}').innerHTML += '<span class="badge rounded-pill" style="font-size: 12px;">A vencer</span>'
+              } 
+            </script>
+            {% endfor %}
+          </ul>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- fim do Modal ver tudo -->
+
+  <!-- começo do Modal ver tudo contas pagas -->
+  <div class="modal fade" id="modalVertudoContasPagas" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Todas as contas pagas</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+          <ul class="list-group">
+            {% for conta_paga_tudo in contas_pagas_tudo %}
+
+            <li type="button" id="listContaPaga{{ conta_paga_tudo.id }}" class="list-group-item d-flex justify-content-between align-items-center listBorder" id="{{ conta_paga_tudo.id }}" data-bs-toggle="modal" data-bs-target="#modalDeleteContaPaga{{ conta_paga_tudo.id }}">
+              {{ conta_paga_tudo.nome }}
+              
+              <span class="badge bg-success rounded-pill">
+                <span class="badge bg-light text-dark rounded-pill" style="font-size: 12px;" id="spanVencimento3{{ conta_paga_tudo.id }}"> </span>
+                R$ {{ conta_paga_tudo.valor }}
+                <span class="badge rounded-pill" style="font-size: 12px;">Paga</span>
+              </span>
+            </li>
+
+            <script>
+              document.getElementById('spanVencimento3{{ conta_paga_tudo.id }}').innerHTML = "{{ conta_paga_tudo.data_pagamento }}".split('-').reverse().join('/');
+            </script>
+            
+            {% endfor %}
+          </ul>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- fim do Modal ver tudo contas pagas -->
+
+  {% for conta_pagar_tudo in contas_pagar_tudo %}
+  <!-- começo do Modal pagar conta -->
+  <div class="modal fade" id="modalPagarconta{{ conta_pagar_tudo.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Tem certeza que a conta está paga?</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Ao clicar em Confirmar a conta <span style="background-color: rgba(0, 255, 38, 0.361);">{{ conta_pagar_tudo.nome }}</span> vai ser salva como já paga.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Fechar</button>
+          <form action="{{ url('pagar_conta/') }}">
+            <input type="text" name="id_conta" value="{{ conta_pagar_tudo.id }}" hidden>
+            <input type="text" name="valor" value="{{ conta_pagar_tudo.valor }}" hidden>
+            <button type="submit" class="btn btn-primary">Confirmar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- fim do Modal pagar conta -->
+
+  {% endfor %}
+
+  
+   <!-- começo do Modal FC -->
+   <div class="modal fade" id="modalFluxoCaixaMes" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="titleFC">Todo o fluxo de caixa no mês de </h1>
+          <script>
+           document.querySelector("#titleFC").innerHTML += $("#select_mes option:selected").html()
+          </script>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+          <div class="card text-center">
+            <div class="card-header">
+              <ul class="nav nav-tabs card-header-tabs">
+                <li class="nav-item">
+                  <button class="nav-link link-body-emphasis active" id="roteFC1" onclick="roteCard2('roteFC1', 'cardBodyFC1')">Entradas</button>
+                </li>
+                <li class="nav-item">
+                  <button class="nav-link link-body-emphasis" id="roteFC2" onclick="roteCard2('roteFC2', 'cardBodyFC2')">Saídas</button>
+                </li>
+              </ul>
+            </div>
+            <div class="card-body" id="cardBodyFC2" style="max-height: 280px; overflow: scroll;" hidden>
+
+              <div class="list-group">
+                <!-- Saída -->
+                <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" style="text-align: start;">
+                  <svg class="bi pe-none flex-shrink-0" width="32" height="32" role="img" aria-label="orcamento"><use xlink:href="#orcamento"></use></svg>
+
+                  <div class="d-flex gap-2 w-100 justify-content-between">
+                    <div>
+                      <h6 class="mb-0">Igor Maiad</h6>
+                      <p class="mb-0 opacity-75">Zambiank 1e</p>
+                    </div>
+                    <small class="text-danger text-nowrap">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                        <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                      </svg>
+                      R$ 550,00
+                    </small>
+                  </div>
+                </a>
+
+                <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" style="text-align: start;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-person-up flex-shrink-0" viewBox="0 0 16 16">
+                    <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm.354-5.854 1.5 1.5a.5.5 0 0 1-.708.708L13 11.707V14.5a.5.5 0 0 1-1 0v-2.793l-.646.647a.5.5 0 0 1-.708-.708l1.5-1.5a.5.5 0 0 1 .708 0ZM11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/>
+                    <path d="M8.256 14a4.474 4.474 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10c.26 0 .507.009.74.025.226-.341.496-.65.804-.918C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4s1 1 1 1h5.256Z"/>
+                  </svg>
+
+                  <div class="d-flex gap-2 w-100 justify-content-between">
+                    <div>
+                      <h6 class="mb-0">Gustavo Avinte</h6>
+                      <p class="mb-0 opacity-75">Pagamento da quinzena</p>
+                    </div>
+                    <small class="text-danger text-nowrap">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill flex-shrink-0" viewBox="0 0 16 16">
+                        <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                      </svg>
+                      R$ 450,00
+                    </small>
+                  </div>
+                </a>
+
+                <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" style="text-align: start;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-file-earmark-break" viewBox="0 0 16 16">
+                    <path d="M14 4.5V9h-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v7H2V2a2 2 0 0 1 2-2h5.5L14 4.5zM13 12h1v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-2h1v2a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-2zM.5 10a.5.5 0 0 0 0 1h15a.5.5 0 0 0 0-1H.5z"/>
+                  </svg>
+
+                  <div class="d-flex gap-2 w-100 justify-content-between">
+                    <div>
+                      <h6 class="mb-0">Aluguel</h6>
+                      <p class="mb-0 opacity-75">Pagamento fixo</p>
+                    </div>
+                    <small class="text-danger text-nowrap">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                        <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                      </svg>
+                      R$ 1.200,00
+                    </small>
+                  </div>
+                </a>
+                
+                
+              </div>
+
+            </div>
+            <div class="card-body" id="cardBodyFC1" style="max-height: 280px; overflow: scroll;">
+              
+              <div class="list-group" id="entradaFC">
+                <!-- Entrada -->
+                
+                
+              </div>
+
+            </div>
+          </div>
+                
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- fim do Modal FC -->
+
+<script src="../site/js/roteCard.js"></script>
+<script src="../site/js/deleteElemento.js"></script>
+
+<script>
+
+  function viewCash(){
+    let lucroElement = document.getElementById('lucroMes')
+    let eye = document.querySelector('.btnEyeCash')
+
+    if(lucroElement.classList == 'card-title'){
+      eye.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-eye-slash-fill" viewBox="0 0 16 16"><path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588zM5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474L5.21 3.089z"/><path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12-.708.708z"/></svg>'
+      lucroElement.classList = 'card-title invisibledText'
+    }else{
+      eye.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16"><path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/><path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/></svg>'
+      lucroElement.classList = 'card-title'
+    }
+  }
+  
+function buscaFC(){
+    let mesSelect = document.getElementById('select_mes')
+
+    $(document).ready(function (){
+        $.ajax({
+            url: "{{ url('buscaFluxoCaixa/') }}",
+            method: 'GET',
+            data: {
+                'mes': mesSelect.value
+            },
+            success: function (data) {
+                let dados = JSON.parse(data)
+                goDados(dados)
+                goFluxoCaixa(dados)
+            }
+        })
+
+        function goFluxoCaixa(dados){
+            let entradaFluxoCaixa = document.getElementById('entradaFC')
+            entradaFluxoCaixa.innerHTML = ''
+            for(let a=0; a < dados.entradaInfo.length; a++){
+                entradaFluxoCaixa.innerHTML += '<div class="list-group-item list-group-item-action d-flex gap-3 py-3" style="text-align: start;"><svg class="bi pe-none flex-shrink-0" width="32" height="32" role="img" aria-label="orcamento"><use xlink:href="#orcamento"></use></svg><div class="d-flex gap-2 w-100 justify-content-between"><div><h6 class="mb-0" id="nomeCarro'+ dados.entradaInfo[a].id +'">  </h6><p class="mb-0 opacity-75" id="dataEntrada'+ dados.entradaInfo[a].id +'"> </p></div><small class="text-success text-nowrap"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg><span id="valorOrcamento'+ dados.entradaInfo[a].id +'">  </span></small></div></div>'
+
+                for(let i=0; i < dados.orcamentos.length; i++){
+                    if(dados.entradaInfo[a].id_orcamento == dados.orcamentos[i].id){
+                        document.getElementById('nomeCarro'+ dados.entradaInfo[a].id).innerHTML = dados.orcamentos[i].carro
+                        document.getElementById('dataEntrada'+ dados.entradaInfo[a].id).innerHTML = ((dados.entradaInfo[a].data_time).substring(0, 10)).split('-').reverse().join('/')
+                        document.getElementById('valorOrcamento'+ dados.entradaInfo[a].id).innerHTML = (Number(dados.entradaInfo[a].valor)).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})
+
+                    }
+                }
+            }
+        }
+
+        function goDados(dados){
+            let n1 = 0
+            let n2 = 0
+            let n3 = 0
+            let n4 = 0
+            let n5 = 0
+            let valorTotalReceita = 0
+            let valorTotalSaida = 0
+            let lucroMesTotal = 0
+            let totalFC = 0
+
+            if(dados.entradaInfo.length != 0){
+
+              for(let i =0; i < dados.entradaInfo.length; i++){
+                  valorTotalReceita += Number(dados.entradaInfo[i].valor)
+              }
+
+              let interval1 = setInterval(() => {
+                  if(n1 < valorTotalReceita){
+                      n1 += (valorTotalReceita / 50)
+                      document.getElementById('entradas').innerHTML = n1.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})
+                  }else{
+                      document.getElementById('entradas').innerHTML = valorTotalReceita.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})
+                      clearInterval(interval1)
+                  }
+              }, 10);
+            }else{
+              document.getElementById('entradas').innerHTML = n1.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})
+            }
+
+            if(dados.saida.length != 0){
+              valorTotalSaida = dados.saida
+              let interval2 = setInterval(() => {
+                  if(n2 < valorTotalSaida){
+                      n2 += (valorTotalSaida / 50)
+                      document.getElementById('saidas').innerHTML = n2.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})
+                  }else{
+                      document.getElementById('saidas').innerHTML = valorTotalSaida.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})
+                      clearInterval(interval2)
+                  }
+              }, 10);
+  
+              lucroMesTotal = valorTotalReceita - valorTotalSaida
+              totalFC = valorTotalReceita + valorTotalSaida
+            }else{
+              document.getElementById('saidas').innerHTML = n2.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})
+            }
+
+              let interval3 = setInterval(() => {
+                  if(n3 < lucroMesTotal){
+                      n3 += (lucroMesTotal != 0 ? (lucroMesTotal / 50) : 0) 
+                      document.getElementById('lucroMes').innerHTML = n3.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})
+                  }else{
+                      document.getElementById('lucroMes').innerHTML = lucroMesTotal.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})
+                      clearInterval(interval3) 
+                  }
+              }, 10);
+
+              let percentEntrada = (totalFC != 0 ? ((valorTotalReceita * 100) / totalFC).toFixed(2) : 0) 
+
+              let interval4 = setInterval(() => {
+                  if(n4 < percentEntrada){
+                      n4 += (percentEntrada != 0 ? (percentEntrada / 50) : 0) 
+                      document.getElementById('percentEntrada').innerHTML = n4.toFixed(2) + '%'
+                  }else{
+                      document.getElementById('percentEntrada').innerHTML = percentEntrada + '%'
+                      clearInterval(interval4)
+                  }
+              }, 10);
+
+              let percentSaida = (totalFC != 0 ? ((dados.saida * 100) / totalFC).toFixed(2) : 0) 
+
+              let interval5 = setInterval(() => {
+                  if(n5 < percentSaida){
+                      n5 += (percentSaida != 0 ? (percentSaida / 50) : 0) 
+                      document.getElementById('percentSaida').innerHTML = n5.toFixed(2) + '%'
+                  }else{
+                      document.getElementById('percentSaida').innerHTML = percentSaida + '%'
+                      clearInterval(interval5)
+                  }
+              }, 10);
+        }
+    })
+}
+
+
+buscaFC()
+</script>
+
+  {% endblock %}

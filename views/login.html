@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Login - WorkAdmin</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/sign-in/">
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sidebars/">
+    
+    <link rel="stylesheet" href="../site/bootstrap/css/bootstrap.css">
+
+    <!-- Custom styles for this template -->
+    <link href="../site/css/login.css" rel="stylesheet">
+
+    <style>
+      html{
+        user-select: none;
+      }
+      .olho{
+  background-color: rgb(255, 255, 255);
+      }
+      .btn-primary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #0d85fd;
+  --bs-btn-border-color: #0d8dfd;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #0b6ed7;
+  --bs-btn-hover-border-color: #0a7aca;
+  --bs-btn-focus-shadow-rgb: 49, 132, 253;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #0a6dca;
+  --bs-btn-active-border-color: #0a61be;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: #0d8dfd;
+  --bs-btn-disabled-border-color: #0d69fd;
+  opacity: 0.7;
+}
+    </style>
+  </head>
+  <body class="text-center">
+
+    <script>
+      console.log("{{ nome_empresa }}")
+    </script>
+
+<main class="form-signin w-100 m-auto">
+  <form action="{{ url('goLogin/') }}" method="post" class="needs-validation " >
+    <img src="../site/img/workadmin.png" alt="" class="mb-4" width="100px" height="100px">
+    <h1 class="h3 mb-3 fw-normal">Realize o Login</h1>
+
+    <div class="form-floating">
+      <input type="text" class="form-control nome_usuario" name="nome_empresa" placeholder="Digite seu nome completo" value="" required>
+      <label for="floatingInput">Nome da empresa</label>
+      <div class="invalid-feedback">
+        Por favor informe o nome da sua empresa.
+      </div>
+    </div>
+    <div class="form-floating">
+      <input type="password" class="form-control senha_conta" id="pass" name="senha" placeholder="Digite a sua senha" required>
+      <label for="floatingPassword">Senha da conta</label>
+      <img src="https://img.icons8.com/fluency-systems-regular/20/000000/visible.png" class="olho" id="olho"/>
+      <div class="invalid-feedback">
+        Por favor informe sua senha da conta.
+      </div>
+    </div>
+
+    <script>
+      "{% if aviso == 'invalid' %}"
+        document.querySelector(".senha_conta").classList += ' is-invalid'
+        document.querySelector(".nome_usuario").classList += ' is-invalid' 
+      "{% endif %}"
+    </script>
+<br>
+    <button class="w-100 btn btn-lg btn-primary" type="submit" value="Acessar" name="SendLogin">Entrar</button>
+  </form>
+
+  <hr class="my-4">
+  <p>Ainda não tem uma conta? <a href="{{ url('cadastro/') }}">Cadastrar</a></p>
+
+<p class="mt-5 mb-3 text-muted">© 2023–2024</p>
+</main>
+  
+<script>
+  document.getElementById('olho').addEventListener('mousedown', function() {
+    document.getElementById('pass').type = 'text';
+  });
+  
+  document.getElementById('olho').addEventListener('mouseup', function() {
+    document.getElementById('pass').type = 'password';
+  });
+  
+  // Para que o password não fique exposto apos mover a imagem.
+  document.getElementById('olho').addEventListener('mousemove', function() {
+    document.getElementById('pass').type = 'password';
+  });
+  
+  </script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+</body></html>

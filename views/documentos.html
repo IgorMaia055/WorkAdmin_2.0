@@ -1,0 +1,51 @@
+{% extends 'body.html' %}
+
+  {% block body %}
+
+  
+  <div class="container px-4 py-5" id="hanging-icons">
+    <h2 class="pb-2 border-bottom">Documentos</h2>
+    <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+      <div class="col d-flex align-items-start">
+        <div class="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+            <svg class="bi" width="1.2em" height="1.2em"><use xlink:href="#orcamento"></use></svg>
+        </div>
+        <div>
+          <h3 class="fs-2 text-body-emphasis">Orçamentos</h3>
+          <p>Crie um orçamento para seu serviço.</p>
+          <a href="{{ url('orcamentos/') }}" class="btn btn-primary">
+            Ir para
+          </a>
+        </div>
+      </div>
+      <div class="col d-flex align-items-start">
+        <div class="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+          <svg class="bi" width="1.2em" height="1.2em"><use xlink:href="#recibos"></use></svg>
+        </div>
+        <div>
+          <h3 class="fs-2 text-body-emphasis">Recibos</h3>
+          <p>Crie recibos para os pagamentos realizados</p>
+          <a href="{{ url('recibos/') }}" class="btn btn-primary">
+            Ir para
+          </a>
+        </div>
+      </div>
+      <div class="col d-flex align-items-start">
+        <div class="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+          <svg class="bi" width="1.3em" height="1.3em"><use xlink:href="#nfs-e"></use></svg>
+        </div>
+        <div>
+          <h3 class="fs-2 text-body-emphasis">NFS-e</h3>
+          <p>Crie notas fiscais de seus serviços.</p>
+          <a href="#" class="btn btn-primary">
+            Ir para
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <script>
+        sinalRote('documentos')
+    </script>
+  {% endblock %}

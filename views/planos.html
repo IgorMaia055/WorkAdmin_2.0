@@ -1,0 +1,199 @@
+{% extends 'bodyCad.html' %}
+
+  {% block bodyCad %}
+
+  <style>
+    html{
+        user-select: none;
+    }
+    .iconCheck{
+        padding-right: 5px;
+    }
+    .iconNotCheck{
+        padding-right: 5px;
+    }
+  </style>
+
+    <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+      <h1 class="display-4 fw-normal text-body-emphasis">Planos</h1>
+      <p class="fs-5 text-body-secondary">Escolha o plano que melhor se adapte à sua empresa, e lembre-se de que você pode alterar o plano após o período de uso.</p>
+    </div>
+
+  <main>
+    <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+      <div class="col">
+        <div class="card mb-4 rounded-3 shadow-sm" id="card1">
+          <div class="card-header py-3" id="cardHeader1">
+            <h4 class="my-0 fw-normal">Junior</h4>
+          </div>
+          <div class="card-body">
+            <h1 class="card-title pricing-card-title">R$ 80,00<small class="text-body-secondary fw-light">/mês</small></h1>
+            <ul class="list-unstyled mt-3 mb-4" style="text-align: start;">
+              <li><span class="text-success iconCheck"></span>Criação de orçamentos</li>
+              <li><span class="text-success iconCheck"></span>Criação de recibos</li>
+              <li><span class="text-success iconCheck"></span>Contas a pagar e receber</li>
+              <li><span class="text-success iconCheck"></span>Emitir NFS-e</li>
+              <li><span class="text-danger iconNotCheck"></span>Emitir NF-e</li>
+              <li><span class="text-success iconCheck"></span>Controle de RH</li>
+              <li><span class="text-success iconCheck"></span>Fluxo de caixa</li>
+              <li><span class="text-danger iconNotCheck"></span>Análise de investimento</li>
+              <li><span class="text-success iconCheck"></span>Administração financeira</li>
+              <li><span class="text-success iconCheck"></span>Gestão de estoque</li>
+              <li><span class="text-danger iconNotCheck"></span>Análise de mercado</li>
+              <li><span class="text-danger iconNotCheck"></span>Gerenciamento de clientes</li>
+              <li><span class="text-danger iconNotCheck"></span>Gestão de projetos</li>
+              <li><span class="text-danger iconNotCheck"></span>Criação de tipos de orçamento</li>
+              <li><span class="text-success iconCheck"></span>Calculo de lucro no orçamento</li>
+            </ul>
+            <form action="{{ url('escolhaPlano') }}" method="post">
+                <input type="text" name="id_plano" value="1" hidden>
+                <input type="text" name="id_pagwork" value="{{ id_pagwork }}" hidden>
+                <button type="submit" class="w-100 btn btn-lg btn-outline-primary">Selecionar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card mb-4 rounded-3 shadow-sm" id="card2">
+          <div class="card-header py-3">
+            <h4 class="my-0 fw-normal">Senior</h4>
+          </div>
+          <div class="card-body">
+            <h1 class="card-title pricing-card-title">R$ 160,00<small class="text-body-secondary fw-light">/mês</small></h1>
+            <ul class="list-unstyled mt-3 mb-4" style="text-align: start;">
+                <li><span class="text-success iconCheck"></span>Criação de orçamentos</li>
+              <li><span class="text-success iconCheck"></span>Criação de recibos</li>
+              <li><span class="text-success iconCheck"></span>Contas a pagar e receber</li>
+              <li><span class="text-success iconCheck"></span>Emitir NFS-e</li>
+              <li><span class="text-danger iconNotCheck"></span>Emitir NF-e</li>
+              <li><span class="text-success iconCheck"></span>Controle de RH</li>
+              <li><span class="text-success iconCheck"></span>Fluxo de caixa</li>
+              <li><span class="text-success iconCheck"></span>Análise de investimento</li>
+              <li><span class="text-success iconCheck"></span>Administração financeira</li>
+              <li><span class="text-success iconCheck"></span>Gestão de estoque</li>
+              <li><span class="text-danger iconNotCheck"></span>Análise de mercado</li>
+              <li><span class="text-success iconCheck"></span>Gerenciamento de clientes</li>
+              <li><span class="text-danger iconNotCheck"></span>Gestão de projetos</li>
+              <li><span class="text-danger iconNotCheck"></span>Criação de tipos de orçamento</li>
+              <li><span class="text-success iconCheck"></span>Calculo de lucro no orçamento</li>
+            </ul>
+            <form action="{{ url('escolhaPlano') }}" method="post">
+                <input type="text" name="id_plano" value="2" hidden>
+                <input type="text" name="id_pagwork" value="{{ id_pagwork }}" hidden>
+
+                <button type="submit" class="w-100 btn btn-lg btn-outline-primary">Selecionar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card mb-4 rounded-3 shadow-sm" id="card3">
+            <div class="card-header py-3">
+              <h4 class="my-0 fw-normal">Master</h4>
+            </div>
+            <div class="card-body">
+              <h1 class="card-title pricing-card-title">R$ 220,00<small class="text-body-secondary fw-light">/mês</small></h1>
+              <ul class="list-unstyled mt-3 mb-4" style="text-align: start;">
+                <li><span class="text-success iconCheck"></span>Criação de orçamentos</li>
+              <li><span class="text-success iconCheck"></span>Criação de recibos</li>
+              <li><span class="text-success iconCheck"></span>Contas a pagar e receber</li>
+              <li><span class="text-success iconCheck"></span>Emitir NFS-e</li>
+              <li><span class="text-success iconCheck"></span>Emitir NF-e</li>
+              <li><span class="text-success iconCheck"></span>Controle de RH</li>
+              <li><span class="text-success iconCheck"></span>Fluxo de caixa</li>
+              <li><span class="text-success iconCheck"></span>Análise de investimento</li>
+              <li><span class="text-success iconCheck"></span>Administração financeira</li>
+              <li><span class="text-success iconCheck"></span>Gestão de estoque</li>
+              <li><span class="text-success iconCheck"></span>Análise de mercado</li>
+              <li><span class="text-success iconCheck"></span>Gerenciamento de clientes</li>
+              <li><span class="text-success iconCheck"></span>Gestão de projetos</li>
+              <li><span class="text-success iconCheck"></span>Criação de tipos de orçamento</li>
+              <li><span class="text-success iconCheck"></span>Calculo de lucro no orçamento</li>
+            </ul>
+            <form action="{{ url('escolhaPlano') }}" method="post">
+                <input type="text" name="id_plano" value="3" hidden>
+                <input type="text" name="id_pagwork" value="{{ id_pagwork }}" hidden>
+
+                <button type="submit" class="w-100 btn btn-lg btn-outline-primary">Selecionar</button>
+            </form>
+            </div>
+          </div>
+      </div>
+    </div>
+
+    <h2 class="display-6 text-center mb-4">Compare os planos</h2>
+
+    <div class="table-responsive">
+      <table class="table text-center">
+        <thead>
+          <tr>
+            <th style="width: 34%;"></th>
+            <th style="width: 22%;">Junior</th>
+            <th style="width: 22%;">Senior</th>
+            <th style="width: 22%;">Master</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row" class="text-start">Administração</th>
+            <td>Médio</td>
+            <td>Médio</td>
+            <td>Avançado</td>
+          </tr>
+          <tr>
+            <th scope="row" class="text-start">Gestão</th>
+            <td>Médio</td>
+            <td>Médio</td>
+            <td>Avançado</td>
+          </tr>
+            <tr>
+                <th scope="row" class="text-start">Recursos humanos</th>
+                <td>Baixo</td>
+                <td>Médio</td>
+                <td>Avançado</td>
+              </tr>
+              <tr>
+                <th scope="row" class="text-start">Documentos</th>
+                <td>Baixo</td>
+                <td>Baixo</td>
+                <td>Avançado</td>
+              </tr>
+              <tr>
+                <th scope="row" class="text-start">Análises precisas</th>
+                <td>Médio</td>
+                <td>Médio</td>
+                <td>Médio</td>
+              </tr>
+                <tr>
+                    <th scope="row" class="text-start">Fluxo de caixa</th>
+                    <td>Avançado</td>
+                    <td>Avançado</td>
+                    <td>Avançado</td>
+                  </tr>
+              <tr>
+                <th scope="row" class="text-start">Interações</th>
+                <td>Médio</td>
+                <td>Avançado</td>
+                <td>Avançado</td>
+              </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+
+  <script>
+    let iconCheck = document.querySelectorAll('.iconCheck')
+    let iconNotCheck = document.querySelectorAll('.iconNotCheck')
+
+    for(let i=0; i < iconCheck.length; i++){
+        iconCheck[i].innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-check2-circle" viewBox="0 0 16 16"><path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"/><path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/></svg>'
+    }
+
+    for(let i=0; i < iconNotCheck.length; i++){
+        iconNotCheck[i].innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg>'
+    }
+    
+  </script>
+
+  {% endblock %}

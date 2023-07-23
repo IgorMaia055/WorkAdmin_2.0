@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Erro: Sem conexão com a Internet</title>
+  <!-- Link para o Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 text-center mt-5">
+        <h1 class="text-danger">Erro: Sem conexão com a Internet</h1>
+        <p class="text-muted">Desculpe, parece que você está sem conexão com a Internet neste momento.</p>
+        <p class="text-muted">Verifique as seguintes dicas para tentar resolver o problema:</p>
+        <ul class="list-unstyled text-muted">
+          <li>Verifique se o cabo de rede ou o Wi-Fi está conectado corretamente ao seu dispositivo.</li>
+          <li>Reinicie o roteador ou modem.</li>
+          <li>Tente se reconectar à rede Wi-Fi selecionando-a novamente.</li>
+          <li>Entre em contato com o provedor de serviços de Internet (ISP) para verificar se há problemas na sua conexão.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts do Bootstrap -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    window.addEventListener('online', function(e){
+     location.href = "{{ url('home/') }}"
+    },false)
+
+  </script>
+</body>
+</html>
